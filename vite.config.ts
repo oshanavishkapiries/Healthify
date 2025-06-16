@@ -14,4 +14,26 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    chunkSizeWarningLimit: 500,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          "vendor-react": ["react", "react-dom", "react-router-dom"],
+          "vendor-ui": [
+            "@radix-ui/react-dropdown-menu",
+            "@radix-ui/react-slot",
+          ],
+          "vendor-forms": ["react-hook-form", "@hookform/resolvers", "zod"],
+          "vendor-animations": ["framer-motion"],
+          "vendor-styling": [
+            "tailwindcss",
+            "class-variance-authority",
+            "clsx",
+            "tailwind-merge",
+          ],
+        },
+      },
+    },
+  },
 });
