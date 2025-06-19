@@ -15,7 +15,7 @@ export function CategoryFilter({
     <div className="flex gap-2 mb-4 pb-4 overflow-x-auto scrollbar-hide flex-nowrap md:flex-wrap md:overflow-x-visible">
       <Button
         variant={selected === "All" ? "default" : "outline"}
-        className="font-medium px-6 rounded-full transition-colors whitespace-nowrap"
+        className="font-medium px-6 rounded-lg transition-colors whitespace-nowrap"
         onClick={() => onSelect("All")}
       >
         <span className="text-sm">All</span>
@@ -24,7 +24,7 @@ export function CategoryFilter({
         <Button
           key={cat + idx}
           variant={selected === cat ? "default" : "outline"}
-          className="font-medium px-6 rounded-full transition-colors whitespace-nowrap"
+          className="font-medium px-6 rounded-lg transition-colors whitespace-nowrap"
           onClick={() => onSelect(cat)}
         >
           <span className="text-sm">{cat}</span>

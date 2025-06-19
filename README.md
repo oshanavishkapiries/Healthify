@@ -1,54 +1,64 @@
-# React + TypeScript + Vite
+# Health Blogging Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Health Blogging Platform Screenshot](public/readme-poster.png)
 
-Currently, two official plugins are available:
+A modern, health-focused blogging platform built with React, TypeScript, and Vite. Designed for sharing, discovering, and bookmarking health-related articles with a beautiful, responsive UI.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🚀 Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- 📝 Create, view, and bookmark health blog posts
+- 🔍 Powerful search and category filtering
+- 🏷️ Tag and categorize posts
+- 📚 Responsive card-based layouts for posts
+- 🌙 Light & dark mode support
+- 🔒 Authentication (Sign up, Login, Password reset)
+- ⚡ Fast, modern UI with Tailwind CSS
+- 🗂️ Organized codebase with reusable components
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🛠️ Tech Stack
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **React** 19 + **TypeScript**
+- **Vite** for fast development
+- **Tailwind CSS** for styling ([see index.css](src/index.css))
+- **React Router** for navigation
+- **@tanstack/react-query** for data fetching
+- **Lucide React** for icons
+- **Zod** for validation
+- **Sonner** for notifications
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+See [package.json](package.json) for all dependencies.
+
+---
+
+## 📂 Project Structure
+
+- `src/components/` – UI components (cards, navbar, forms, etc.)
+- `src/pages/` – Main pages (Home, Blog, Bookmark, Auth, etc.)
+- `src/hooks/` – Custom React hooks
+- `src/types/` – TypeScript types
+- `src/validations/` – Zod validation schemas
+- `src/index.css` – Tailwind CSS and custom styles
+
+---
+
+## 🖥️ Setup & Development
+
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+2. **Start the dev server:**
+   ```bash
+   npm run dev
+   ```
+3. **Open in browser:**
+   Visit [http://localhost:5173](http://localhost:5173)
+---
+
+## 📄 License
+
+MIT

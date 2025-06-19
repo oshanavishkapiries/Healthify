@@ -15,18 +15,22 @@ import { UserPlus, LogIn } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useScrollPosition } from "@/hooks/useScrollPosition";
 import { ModeToggle } from "../ui/mode-toggle";
+import { useActiveNav } from "@/hooks/useActiveNav";
 
 const navigationLinks = [
-  { href: "#", label: "Home", active: true },
-  { href: "#", label: "Blog" },
-  { href: "#", label: "About" },
-  { href: "#", label: "Contact" },
-  { href: "#", label: "Bookmarks" },
+  { href: "/", label: "Home" },
+  { href: "/blog", label: "Blog" },
+  { href: "/bookmarks", label: "Bookmarks" },
 ];
 
 export default function Navbar() {
+
+  
   const navigate = useNavigate();
   const { y } = useScrollPosition();
+  const { isActive } = useActiveNav();
+
+
   return (
     <header
       className={`px-4 md:px-6 sticky top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -35,7 +39,7 @@ export default function Navbar() {
     >
       <div className="flex h-16 items-center justify-between gap-4 w-full max-w-7xl mx-auto">
         {/* Left side */}
-        <div className="flex items-center gap-2 w-[250px]">
+        <div className="flex items-center gap-2 w-[350px]">
           {/* Mobile menu trigger */}
           <Popover>
             <PopoverTrigger asChild>
@@ -79,7 +83,7 @@ export default function Navbar() {
                       <NavigationMenuLink
                         href={link.href}
                         className="py-1.5"
-                        active={link.active}
+                        active={isActive(link.href)}
                       >
                         {link.label}
                       </NavigationMenuLink>
@@ -101,8 +105,8 @@ export default function Navbar() {
               {navigationLinks.map((link, index) => (
                 <NavigationMenuItem key={index}>
                   <NavigationMenuLink
-                    // active={link.active}
                     href={link.href}
+                    active={isActive(link.href)}
                     className="text-muted-foreground rounded-full hover:text-primary py-1.5 px-4 font-medium flex flex-row items-center gap-1.5"
                   >
                     {link.label}

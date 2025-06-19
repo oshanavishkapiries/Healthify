@@ -1,15 +1,21 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { OptimizedImage } from "@/components/common/optimized-image";
-import type { BlogPost } from "@/types/BlogPost";
+import type { BlogPost } from "@/types/Blog";
+import { useNavigate } from "react-router-dom";
+import { Bookmark } from "lucide-react";
 
 interface BlogCardProps {
   post: BlogPost;
 }
 
 export const BlogCard = ({ post }: BlogCardProps) => {
+  const navigate = useNavigate();
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-200">
+    <Card
+      className="overflow-hidden hover:shadow-lg transition-shadow duration-200 relative"
+      onClick={() => navigate(`/blog/${post.id}`)}
+    >
       <CardHeader className="p-0">
         <div className="aspect-video relative overflow-hidden">
           <OptimizedImage
@@ -17,6 +23,15 @@ export const BlogCard = ({ post }: BlogCardProps) => {
             alt={post.title}
             className="w-full h-full object-cover"
           />
+          <button
+            className="absolute top-3 right-3 p-2 bg-background/80 rounded-full hover:bg-background/90 transition-colors duration-200"
+            onClick={(e) => {
+              e.stopPropagation();
+              console.log("Bookmark clicked for post:", post.id);
+            }}
+          >
+            <Bookmark className="w-4 h-4 text-foreground" />
+          </button>
         </div>
       </CardHeader>
       <CardContent className="p-6">

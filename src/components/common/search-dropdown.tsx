@@ -24,7 +24,7 @@ export const SearchDropdown: React.FC<SearchDropdownProps> = ({
 
   return (
     <div className="relative w-full">
-      <div className="flex items-center border rounded-full px-3 py-2 bg-background focus-within:ring-2 focus-within:ring-primary">
+      <div className="flex items-center border rounded-lg px-3 py-2 bg-background focus-within:ring-2 focus-within:ring-primary">
         <Search className="text-muted-foreground mr-2 size-5" />
         <input
           type="text"

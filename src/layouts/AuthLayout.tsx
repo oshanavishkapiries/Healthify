@@ -1,6 +1,7 @@
 import { BackButton } from "@/components/common/back-button";
 import { Outlet } from "react-router-dom";
 import AnimatedBackground from "@/components/common/AnimatedBackground";
+import { Logo } from "@/components/common/logo";
 
 const AuthLayout = () => {
   return (
@@ -9,7 +10,8 @@ const AuthLayout = () => {
       <div className="absolute top-0 left-0 p-4 z-10">
         <BackButton />
       </div>
-      <div className="z-10 w-full max-w-md">
+      <div className="z-10 w-full max-w-md flex flex-col items-center justify-center">
+        <Logo />
         <Outlet />
       </div>
     </div>
