@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/popover";
 import { Logo } from "@/components/common/logo";
 import { UserPlus, LogIn } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useScrollPosition } from "@/hooks/useScrollPosition";
 import { ModeToggle } from "../ui/mode-toggle";
 import { useActiveNav } from "@/hooks/useActiveNav";
@@ -24,12 +24,9 @@ const navigationLinks = [
 ];
 
 export default function Navbar() {
-
-  
   const navigate = useNavigate();
   const { y } = useScrollPosition();
   const { isActive } = useActiveNav();
-
 
   return (
     <header
@@ -80,13 +77,15 @@ export default function Navbar() {
                 <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
                   {navigationLinks.map((link, index) => (
                     <NavigationMenuItem key={index} className="w-full">
-                      <NavigationMenuLink
-                        href={link.href}
-                        className="py-1.5"
-                        active={isActive(link.href)}
-                      >
-                        {link.label}
-                      </NavigationMenuLink>
+                      <Link to={link.href}>
+                        {" "}
+                        <NavigationMenuLink
+                          className="py-1.5"
+                          active={isActive(link.href)}
+                        >
+                          {link.label}
+                        </NavigationMenuLink>
+                      </Link>
                     </NavigationMenuItem>
                   ))}
                 </NavigationMenuList>
@@ -104,13 +103,14 @@ export default function Navbar() {
             <NavigationMenuList className="gap-2">
               {navigationLinks.map((link, index) => (
                 <NavigationMenuItem key={index}>
-                  <NavigationMenuLink
-                    href={link.href}
-                    active={isActive(link.href)}
-                    className="text-muted-foreground rounded-full hover:text-primary py-1.5 px-4 font-medium flex flex-row items-center gap-1.5"
-                  >
-                    {link.label}
-                  </NavigationMenuLink>
+                  <Link to={link.href}>
+                    <NavigationMenuLink
+                      active={isActive(link.href)}
+                      className="text-muted-foreground rounded-full hover:text-primary py-1.5 px-4 font-medium flex flex-row items-center gap-1.5"
+                    >
+                      {link.label}
+                    </NavigationMenuLink>
+                  </Link>
                 </NavigationMenuItem>
               ))}
             </NavigationMenuList>
