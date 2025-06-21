@@ -3,8 +3,13 @@ import { Calendar } from "lucide-react";
 import { OptimizedImage } from "./common/optimized-image";
 import type { BlogPostView } from "@/types/Blog";
 import { formatDate } from "@/utils/formatDate";
+import { useEffect } from "react";
 
 export default function BlogViewPage({ blogPost }: { blogPost: BlogPostView }) {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
       <article className="space-y-8">

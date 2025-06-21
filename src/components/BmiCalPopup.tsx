@@ -85,7 +85,10 @@ export default function BmiCalPopup() {
       <DialogTrigger asChild>
         <Button className="w-[150px] rounded-full">Calculate</Button>
       </DialogTrigger>
-      <DialogContent className="flex flex-col gap-0 p-0 sm:max-h-[min(640px,80vh)] sm:max-w-lg">
+      <DialogContent
+        onOpenAutoFocus={(e) => e.preventDefault()}
+        className="flex flex-col gap-0 p-0 sm:max-h-[min(640px,80vh)] sm:max-w-lg"
+      >
         <ScrollArea className="flex max-h-full flex-col overflow-hidden">
           <DialogHeader className="contents space-y-0 text-left">
             <DialogTitle className="px-6 pt-6">BMI Calculator</DialogTitle>
