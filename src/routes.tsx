@@ -12,6 +12,7 @@ import ForgetPassword from "./pages/auth/ForgetPassword";
 import Blog from "./pages/Blog";
 import BlogView from "./pages/BlogView";
 import Bookmark from "./pages/Bookmark";
+import BlogCreate from "./pages/BlogCreate";
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ export const router = createBrowserRouter([
       {
         path: "bookmarks",
         element: <Bookmark />,
+      },
+      {
+        path: "blog/create",
+        element: <BlogCreate />,
       },
       {
         path: "*",
