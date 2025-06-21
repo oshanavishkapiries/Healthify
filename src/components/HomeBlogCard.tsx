@@ -26,7 +26,7 @@ export const HomeBlogCard = ({ post }: HomeBlogCardProps) => {
         </Badge>
       </div>
       <CardContent className="p-4 flex flex-col gap-2">
-        <h3 className="text-lg font-bold text-primary line-clamp-2 mb-1">
+        <h3 className="text-lg font-bold line-clamp-2 mb-1">
           {post.title}
         </h3>
         <p className="text-xs text-muted-foreground line-clamp-2 mb-2">
