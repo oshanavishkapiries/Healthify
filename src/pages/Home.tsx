@@ -2,11 +2,19 @@ import BmiCalculator from "@/components/BmiCalculator";
 import CompleteAccountBanner from "@/components/CompleteAccountBanner";
 import EmailVerifyBanner from "@/components/EmailVerifyBanner";
 import { HomeBlogCard } from "@/components/HomeBlogCard";
-import { sampleBlogPosts } from "@/dump/types";
+import { useGetBlogs } from "@/hooks/query/useBlog";
 import { useUserStore } from "@/store/userStore";
+import BlogPageLoader from "@/components/BlogPageLoader";
+import type { BlogPost } from "@/types/Blog";
+import ErrorBlogFound from "@/components/ErrorBlogFound";
+import NoBlogFound from "@/components/NoBlogFound";
 
 const Home = () => {
   const { user } = useUserStore();
+  const { data, isLoading, error } = useGetBlogs({});
+
+  const blogs: BlogPost[] = data?.pages[0]?.data?.blogs.slice(0, 5) || [];
+
   return (
     <div className="min-h-screen">
       <main className="max-w-7xl mx-auto px-4 py-4">
@@ -15,14 +23,26 @@ const Home = () => {
           <EmailVerifyBanner />
         )}
 
-        {/* BMI Calculator */}
         <BmiCalculator />
-        {/* card grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {sampleBlogPosts.slice(0, 4).map((post) => (
-            <HomeBlogCard key={post._id} post={post} />
-          ))}
-        </div>
+
+        {isLoading ? (
+          <BlogPageLoader />
+        ) : error ? (
+          <ErrorBlogFound />
+        ) : blogs.length > 0 ? (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="h-full">
+              {blogs[0] && <HomeBlogCard post={blogs[0]} isPrimary={true} />}
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {blogs.slice(1, 5).map((post) => (
+                <HomeBlogCard key={post._id} post={post} />
+              ))}
+            </div>
+          </div>
+        ) : (
+          <NoBlogFound />
+        )}
       </main>
     </div>
   );

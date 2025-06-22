@@ -1,28 +1,25 @@
 import { BlogCard } from "@/components/BlogCard";
-import { SearchDropdown } from "@/components/common/search-dropdown";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { CategoryFilter } from "@/components/common/category-filter";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useUserStore } from "@/store/userStore";
 import EmailVerifyBanner from "@/components/EmailVerifyBanner";
 import CompleteAccountBanner from "@/components/CompleteAccountBanner";
 import NoBlogFound from "@/components/NoBlogFound";
 import { useGetBlogs } from "@/hooks/query/useBlog";
-import type { BlogPost } from "@/types/Blog";
 import BlogPageLoader from "@/components/BlogPageLoader";
 import ErrorBlogFound from "@/components/ErrorBlogFound";
 import { useGetMetadata } from "@/hooks/query/useMetaData";
 import type { BlogCategory } from "@/types/meta-api-type";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { motion } from "framer-motion";
+import { SearchInput } from "@/components/common/SearchInput";
 
 const Blog = () => {
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [page, setPage] = useState(1);
-  const [allBlogs, setAllBlogs] = useState<BlogPost[]>([]);
-  const [hasMore, setHasMore] = useState(true);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchQuery = searchParams.get("search") || "";
+  const selectedCategory = searchParams.get("category") || "All";
 
   const { user } = useUserStore();
   const { data: metaData } = useGetMetadata();
@@ -34,49 +31,32 @@ const Blog = () => {
     })) || [];
 
   const {
-    data: blogsData,
-    isLoading,
+    data,
     error,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isFetchingNextPage,
   } = useGetBlogs({
-    page,
-    limit: 8,
     blogCategoryId:
       selectedCategory !== "All"
         ? categories.find(
             (cat: { value: string }) => cat.value === selectedCategory
           )?.value
         : undefined,
+    search: searchQuery,
   });
 
-  useEffect(() => {
-    if (blogsData?.data) {
-      if (blogsData.data.blogs?.length > 0) {
-        setAllBlogs((prev) => [...prev, ...blogsData.data.blogs]);
-      }
-      setHasMore(page < (blogsData.data.totalPages || 0));
-    }
-  }, [blogsData, page]);
+  const allBlogs = data?.pages.flatMap((page) => page.data.blogs) ?? [];
 
   const handleCategorySelect = (category: string) => {
-    if (category !== selectedCategory) {
-      setPage(1);
-      setAllBlogs([]);
-      setHasMore(true);
-      setSelectedCategory(category);
+    const params = new URLSearchParams(searchParams);
+    if (category === "All") {
+      params.delete("category");
+    } else {
+      params.set("category", category);
     }
-  };
-
-  const searchOptions = allBlogs.map((blog: BlogPost) => ({
-    label: blog.title,
-    value: String(blog._id),
-  }));
-
-  const handleSelect = (option: { label: string; value: string }) => {
-    console.log("Selected:", option);
-  };
-
-  const fetchNext = () => {
-    setPage((prev) => prev + 1);
+    setSearchParams(params, { replace: true });
   };
 
   return (
@@ -87,7 +67,7 @@ const Blog = () => {
           <EmailVerifyBanner />
         )}
         <div className="flex items-center justify-center gap-3 mb-4 h-[80px]">
-          <SearchDropdown options={searchOptions} onSelect={handleSelect} />
+          <SearchInput />
           {user?.roleId?.role === "ADMIN" && (
             <Link to="/blog/create">
               <Button className="rounded-lg aspect-square md:w-[150px] py-5">
@@ -107,7 +87,7 @@ const Blog = () => {
           onSelect={handleCategorySelect}
         />
 
-        {isLoading && page === 1 ? (
+        {isLoading ? (
           <BlogPageLoader />
         ) : error ? (
           <ErrorBlogFound />
@@ -116,8 +96,8 @@ const Blog = () => {
         ) : (
           <InfiniteScroll
             dataLength={allBlogs.length}
-            next={fetchNext}
-            hasMore={hasMore}
+            next={fetchNextPage}
+            hasMore={hasNextPage || false}
             loader={<></>}
             scrollThreshold={0.9}
             scrollableTarget="scrollableDiv"
@@ -136,7 +116,7 @@ const Blog = () => {
             </motion.div>
           </InfiniteScroll>
         )}
-        {isLoading && page > 1 && <BlogPageLoader />}
+        {isFetchingNextPage && <BlogPageLoader />}
       </main>
     </div>
   );

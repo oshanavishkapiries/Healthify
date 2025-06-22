@@ -1,20 +1,16 @@
 import { BlogCard } from "@/components/BlogCard";
 import { sampleBlogPosts } from "@/dump/types";
-import { SearchDropdown } from "@/components/common/search-dropdown";
 import BookMarkBanner from "@/components/BookMarkBanner";
-
-const searchOptions = [
-  { label: "All", value: "all" },
-  { label: "Category 1", value: "category1" },
-  { label: "Category 2", value: "category2" },
-];
+import { SearchInput } from "@/components/common/SearchInput";
+import { useUserStore } from "@/store/userStore";
+import GotoSignIn from "@/components/GotoSignIn";
 
 const Bookmark = () => {
-  const handleSelect = (option: { label: string; value: string }) => {
-    // You can implement navigation or filtering here
-    // For now, just log the selected option
-    console.log("Selected:", option);
-  };
+  const { user } = useUserStore();
+
+  if (!user) {
+    return <GotoSignIn />;
+  }
 
   return (
     <div className="min-h-screen">
@@ -22,7 +18,7 @@ const Bookmark = () => {
         <BookMarkBanner />
         {/* search component */}
         <div className="flex items-center justify-center gap-3 mb-4 h-[80px]">
-          <SearchDropdown options={searchOptions} onSelect={handleSelect} />
+          <SearchInput />
         </div>
         {/* card grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

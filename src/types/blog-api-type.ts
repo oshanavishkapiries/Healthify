@@ -23,4 +23,5 @@ export interface GetBlogsParams {
   limit?: number;
   blogCategoryId?: string;
   tags?: string;
+  search?: string;
 }

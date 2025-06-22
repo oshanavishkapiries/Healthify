@@ -34,11 +34,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "bookmarks",
-        element: (
-          <AuthMiddleware>
-            <Bookmark />
-          </AuthMiddleware>
-        ),
+        element: <Bookmark />,
       },
       {
         path: "blog/create",
