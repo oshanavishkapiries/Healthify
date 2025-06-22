@@ -30,7 +30,7 @@ export default function BlogViewPage({ blogPost }: { blogPost: BlogPostView }) {
 
           <div className="flex flex-wrap items-center gap-4">
             <Badge variant="secondary" className="text-sm">
-              {blogPost.category}
+              {blogPost.categoryId.category}
             </Badge>
 
             <div className="flex items-center gap-2 text-sm text-muted-foreground">

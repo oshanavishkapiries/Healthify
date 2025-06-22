@@ -4,6 +4,7 @@ import { OptimizedImage } from "@/components/common/optimized-image";
 import type { BlogPost } from "@/types/Blog";
 import { useNavigate } from "react-router-dom";
 import { Bookmark } from "lucide-react";
+import { pastTime } from "@/utils/pastTime";
 
 interface BlogCardProps {
   post: BlogPost;
@@ -14,7 +15,7 @@ export const BlogCard = ({ post }: BlogCardProps) => {
   return (
     <Card
       className="overflow-hidden hover:shadow-lg transition-shadow duration-200 relative"
-      onClick={() => navigate(`/blog/${post.id}`)}
+      onClick={() => navigate(`/blog/${post._id}`)}
     >
       <CardHeader className="p-0">
         <div className="aspect-video relative overflow-hidden">
@@ -27,7 +28,7 @@ export const BlogCard = ({ post }: BlogCardProps) => {
             className="absolute top-3 right-3 p-2 bg-background/80 rounded-full hover:bg-background/90 transition-colors duration-200"
             onClick={(e) => {
               e.stopPropagation();
-              console.log("Bookmark clicked for post:", post.id);
+              console.log("Bookmark clicked for post:", post._id);
             }}
           >
             <Bookmark className="w-4 h-4 text-foreground" />
@@ -42,8 +43,10 @@ export const BlogCard = ({ post }: BlogCardProps) => {
           {post.description}
         </p>
         <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground/70">{post.date}</p>
-          <Badge variant="secondary">{post.category}</Badge>
+          <p className="text-sm text-muted-foreground/70">
+            {pastTime(post.date)}
+          </p>
+          <Badge variant="secondary">{post.categoryId.category}</Badge>
         </div>
       </CardContent>
     </Card>

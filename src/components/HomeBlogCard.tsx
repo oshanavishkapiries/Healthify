@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { OptimizedImage } from "@/components/common/optimized-image";
 import type { BlogPost } from "@/types/Blog";
 import { useNavigate } from "react-router-dom";
+import { pastTime } from "@/utils/pastTime";
 
 interface HomeBlogCardProps {
   post: BlogPost;
@@ -13,7 +14,7 @@ export const HomeBlogCard = ({ post }: HomeBlogCardProps) => {
   return (
     <Card
       className="overflow-hidden hover:shadow-xl transition-shadow duration-200 border-2 border-primary/20 relative cursor-pointer group"
-      onClick={() => navigate(`/blog/${post.id}`)}
+      onClick={() => navigate(`/blog/${post._id}`)}
     >
       <div className="relative h-40 w-full overflow-hidden">
         <OptimizedImage
@@ -22,7 +23,7 @@ export const HomeBlogCard = ({ post }: HomeBlogCardProps) => {
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
         <Badge className="absolute top-3 left-3 z-10" variant="secondary">
-          {post.category}
+          {post.categoryId.category}
         </Badge>
       </div>
       <CardContent className="p-4 flex flex-col gap-2">
@@ -34,7 +35,7 @@ export const HomeBlogCard = ({ post }: HomeBlogCardProps) => {
         </p>
         <div className="flex items-center justify-between mt-auto">
           <span className="text-xs text-muted-foreground/70 font-mono">
-            {post.date}
+            {pastTime(post.date)}
           </span>
           {/* Optionally, add a small icon or action here */}
         </div>

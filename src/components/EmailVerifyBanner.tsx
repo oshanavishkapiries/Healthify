@@ -11,7 +11,7 @@ export default function EmailVerifyBanner() {
   if (!isVisible) return null;
 
   const handleVerifyEmail = () => {
-    navigate("/auth/verify-email");
+    navigate(`/auth/verify-email`);
   };
 
   return (

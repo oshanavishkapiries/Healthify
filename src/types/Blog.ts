@@ -1,18 +1,24 @@
 export interface BlogPost {
-  id: number;
+  _id: string;
   title: string;
   description: string;
   date: string;
   image: string;
-  category: string;
+  categoryId: {
+    _id: string;
+    category: string;
+  };
 }
 
 export interface BlogPostView {
-  id: number;
+  _id: string;
   title: string;
   description: string;
   date: string;
   image: string;
-  category: string;
+  categoryId: {
+    _id: string;
+    category: string;
+  };
   content: string;
 }

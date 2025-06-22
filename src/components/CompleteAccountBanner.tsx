@@ -3,19 +3,21 @@ import { UserCheck, XIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
+import { useUserStore } from "@/store/userStore";
 
 export default function CompleteAccountBanner() {
   const [isVisible, setIsVisible] = useState(true);
   const navigate = useNavigate();
+  const { user } = useUserStore();
 
   if (!isVisible) return null;
 
   const handleCompleteAccount = () => {
-    navigate("/auth/signup-details");
+    navigate(`/auth/signup-details?userId=${user?._id}`);
   };
 
   return (
-    <div className="dark bg-muted text-foreground px-4 py-3 md:py-2">
+    <div className="bg-muted text-foreground px-4 py-3 md:py-2">
       <div className="flex gap-2 md:items-center">
         <div className="flex grow gap-3 md:items-center">
           <UserCheck
