@@ -1,9 +1,4 @@
-export interface RegisterUserData {
-    email: string;
-    password: string;
-    reset_password_Q: string;
-    reset_password_A: string;
-  }
+
   
   export interface LoginUserData {
     email: string;

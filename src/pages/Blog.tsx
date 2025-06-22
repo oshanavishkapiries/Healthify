@@ -6,6 +6,7 @@ import { PlusIcon } from "lucide-react";
 import { CategoryFilter } from "@/components/common/category-filter";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useUserStore } from "@/store/userStore";
 
 const categories = Array.from({ length: 10 }).map(
   (_, i) => `Category ${i + 1}`
@@ -13,6 +14,7 @@ const categories = Array.from({ length: 10 }).map(
 
 const Blog = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const { user } = useUserStore();
 
   const searchOptions = sampleBlogPosts.map((post) => ({
     label: post.title,
@@ -31,16 +33,18 @@ const Blog = () => {
         {/* search component */}
         <div className="flex items-center justify-center gap-3 mb-4 h-[80px]">
           <SearchDropdown options={searchOptions} onSelect={handleSelect} />
-          <Link to="/blog/create">
-            <Button className="rounded-lg aspect-square md:w-[150px] py-5">
-              <PlusIcon
-                className="opacity-60 sm:-ms-1"
-                size={16}
-                aria-hidden="true"
-              />
-              <span className="hidden md:block text-sm">New Post</span>
-            </Button>
-          </Link>
+          {user?.roleId?.role === "ADMIN" && (
+            <Link to="/blog/create">
+              <Button className="rounded-lg aspect-square md:w-[150px] py-5">
+                <PlusIcon
+                  className="opacity-60 sm:-ms-1"
+                  size={16}
+                  aria-hidden="true"
+                />
+                <span className="hidden md:block text-sm">New Post</span>
+              </Button>
+            </Link>
+          )}
         </div>
         {/* categories */}
         <CategoryFilter

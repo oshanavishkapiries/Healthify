@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 
 import MainLayout from "./layouts/MainLayout";
 import AuthLayout from "./layouts/AuthLayout";
+import AuthMiddleware from "./components/auth/AuthMiddleware";
 
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
@@ -33,11 +34,19 @@ export const router = createBrowserRouter([
       },
       {
         path: "bookmarks",
-        element: <Bookmark />,
+        element: (
+          <AuthMiddleware>
+            <Bookmark />
+          </AuthMiddleware>
+        ),
       },
       {
         path: "blog/create",
-        element: <BlogCreate />,
+        element: (
+          <AuthMiddleware>
+            <BlogCreate />
+          </AuthMiddleware>
+        ),
       },
       {
         path: "*",

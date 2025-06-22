@@ -36,6 +36,11 @@ export default function InputDropdown({
 }: InputDropdownProps) {
   const id = useId();
 
+  const selectedOption = options.find((option) => option.value === value);
+  const displayValue = selectedOption
+    ? selectedOption.label
+    : value || placeholder;
+
   return (
     <div className="*:not-first:mt-2">
       <Label htmlFor={id}>{label}</Label>
@@ -48,7 +53,7 @@ export default function InputDropdown({
             } ${className || ""}`}
             type="button"
           >
-            {value || placeholder}
+            {displayValue}
             <ChevronDownIcon className="h-4 w-4 opacity-60" />
           </Button>
         </DropdownMenuTrigger>

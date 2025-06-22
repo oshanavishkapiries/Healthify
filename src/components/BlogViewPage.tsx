@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Calendar } from "lucide-react";
-import { OptimizedImage } from "./common/optimized-image";
+import { OptimizedImage } from "@/components/common/optimized-image";
 import type { BlogPostView } from "@/types/Blog";
 import { formatDate } from "@/utils/formatDate";
 import { useEffect } from "react";

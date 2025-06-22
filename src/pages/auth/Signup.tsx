@@ -8,6 +8,8 @@ import AnimatedContainer, {
 import EmailInput from "@/components/common/input-email";
 import PasswordInput from "@/components/common/input-password";
 import { signupSchema, type SignupFormData } from "@/validations/signupSchema";
+import { useRegisterPatient, useGoogleAuth } from "@/hooks/query/useAuth";
+import { Loader2 } from "lucide-react";
 
 const Signup = () => {
   const {
@@ -24,9 +26,21 @@ const Signup = () => {
     },
   });
 
+  const registerPatientMutation = useRegisterPatient();
+  const googleAuthMutation = useGoogleAuth();
+
   const onSubmit = (data: SignupFormData) => {
-    // Handle signup logic here
-    console.log(data);
+    registerPatientMutation.mutate({
+      email: data.email,
+      password: data.password,
+      signUpVia: 1,
+    });
+  };
+
+  const handleGoogleSignup = () => {
+    googleAuthMutation.mutate({
+      token: "",
+    });
   };
 
   return (
@@ -75,8 +89,19 @@ const Signup = () => {
         </AnimatedItem>
 
         <AnimatedItem>
-          <Button type="submit" className="w-full py-3 rounded-md">
-            Sign Up with Email
+          <Button
+            type="submit"
+            className="w-full py-3 rounded-md"
+            disabled={registerPatientMutation.isPending}
+          >
+            {registerPatientMutation.isPending ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Signing up...
+              </>
+            ) : (
+              "Sign Up with Email"
+            )}
           </Button>
         </AnimatedItem>
 
@@ -96,9 +121,25 @@ const Signup = () => {
             type="button"
             variant="outline"
             className="w-full border py-3 rounded-md flex items-center justify-center gap-2"
+            onClick={handleGoogleSignup}
+            disabled={googleAuthMutation.isPending}
           >
-            <img src="/google-icon.svg" alt="Google" width={24} height={24} />
-            Sign Up with Google
+            {googleAuthMutation.isPending ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Signing up...
+              </>
+            ) : (
+              <>
+                <img
+                  src="/google-icon.svg"
+                  alt="Google"
+                  width={24}
+                  height={24}
+                />
+                Sign Up with Google
+              </>
+            )}
           </Button>
         </AnimatedItem>
       </form>

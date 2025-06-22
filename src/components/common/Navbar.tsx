@@ -14,8 +14,11 @@ import { Logo } from "@/components/common/logo";
 import { UserPlus, LogIn } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useScrollPosition } from "@/hooks/useScrollPosition";
-import { ModeToggle } from "../ui/mode-toggle";
+import { ModeToggle } from "@/components/ui/mode-toggle";
 import { useActiveNav } from "@/hooks/useActiveNav";
+import ProfileComponent from "./ProfileComponent";
+import { useUserStore } from "@/store/userStore";
+import type { User } from "@/types/user";
 
 const navigationLinks = [
   { href: "/", label: "Home" },
@@ -27,6 +30,7 @@ export default function Navbar() {
   const navigate = useNavigate();
   const { y } = useScrollPosition();
   const { isActive } = useActiveNav();
+  const { user, isAuthenticated } = useUserStore();
 
   return (
     <header
@@ -77,15 +81,18 @@ export default function Navbar() {
                 <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
                   {navigationLinks.map((link, index) => (
                     <NavigationMenuItem key={index} className="w-full">
-                      <Link to={link.href}>
-                        {" "}
-                        <NavigationMenuLink
-                          className="py-1.5"
-                          active={isActive(link.href)}
+                      <NavigationMenuLink asChild>
+                        <Link
+                          to={link.href}
+                          className={`py-1.5 ${
+                            isActive(link.href)
+                              ? "text-primary"
+                              : "text-muted-foreground"
+                          }`}
                         >
                           {link.label}
-                        </NavigationMenuLink>
-                      </Link>
+                        </Link>
+                      </NavigationMenuLink>
                     </NavigationMenuItem>
                   ))}
                 </NavigationMenuList>
@@ -103,14 +110,18 @@ export default function Navbar() {
             <NavigationMenuList className="gap-2">
               {navigationLinks.map((link, index) => (
                 <NavigationMenuItem key={index}>
-                  <Link to={link.href}>
-                    <NavigationMenuLink
-                      active={isActive(link.href)}
-                      className="text-muted-foreground rounded-full hover:text-primary py-1.5 px-4 font-medium flex flex-row items-center gap-1.5"
+                  <NavigationMenuLink asChild>
+                    <Link
+                      to={link.href}
+                      className={`rounded-full hover:text-primary py-1.5 px-4 font-medium flex flex-row items-center gap-1.5 ${
+                        isActive(link.href)
+                          ? "text-primary"
+                          : "text-muted-foreground"
+                      }`}
                     >
                       {link.label}
-                    </NavigationMenuLink>
-                  </Link>
+                    </Link>
+                  </NavigationMenuLink>
                 </NavigationMenuItem>
               ))}
             </NavigationMenuList>
@@ -118,34 +129,42 @@ export default function Navbar() {
         </div>
         {/* Right side */}
         <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            className="aspect-square max-sm:p-0"
-            onClick={() => {
-              navigate("/auth/signup");
-            }}
-          >
-            <UserPlus
-              className="opacity-60 sm:-ms-1"
-              size={16}
-              aria-hidden="true"
-            />
-            <span className="hidden md:block text-sm">Sign Up</span>
-          </Button>
-          <Button
-            variant="ghost"
-            className="aspect-square max-sm:p-0"
-            onClick={() => {
-              navigate("/auth/login");
-            }}
-          >
-            <LogIn
-              className="opacity-60 sm:-ms-1"
-              size={16}
-              aria-hidden="true"
-            />
-            <span className="hidden md:block text-sm">Sign In</span>
-          </Button>
+          {isAuthenticated ? (
+            <div className="flex items-center justify-end gap-2 md:w-[200px]">
+              <ProfileComponent user={user as User} />
+            </div>
+          ) : (
+            <>
+              <Button
+                variant="ghost"
+                className="aspect-square max-sm:p-0"
+                onClick={() => {
+                  navigate("/auth/signup");
+                }}
+              >
+                <UserPlus
+                  className="opacity-60 sm:-ms-1"
+                  size={16}
+                  aria-hidden="true"
+                />
+                <span className="hidden md:block text-sm">Sign Up</span>
+              </Button>
+              <Button
+                variant="ghost"
+                className="aspect-square max-sm:p-0"
+                onClick={() => {
+                  navigate("/auth/login");
+                }}
+              >
+                <LogIn
+                  className="opacity-60 sm:-ms-1"
+                  size={16}
+                  aria-hidden="true"
+                />
+                <span className="hidden md:block text-sm">Sign In</span>
+              </Button>
+            </>
+          )}
           <ModeToggle />
         </div>
       </div>

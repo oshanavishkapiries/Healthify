@@ -9,6 +9,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import AnimatedContainer, {
   AnimatedItem,
 } from "@/components/common/animated-container";
+import { useLogin, useGoogleAuth } from "@/hooks/query/useAuth";
+import { Loader2 } from "lucide-react";
 
 const Login = () => {
   const {
@@ -25,9 +27,20 @@ const Login = () => {
     },
   });
 
+  const loginMutation = useLogin();
+  const googleAuthMutation = useGoogleAuth();
+
   const onSubmit = (data: LoginFormData) => {
-    // Handle login logic here
-    console.log(data);
+    loginMutation.mutate({
+      email: data.email,
+      password: data.password,
+    });
+  };
+
+  const handleGoogleLogin = () => {
+    googleAuthMutation.mutate({
+      token: "",
+    });
   };
 
   return (
@@ -86,8 +99,19 @@ const Login = () => {
         </AnimatedItem>
 
         <AnimatedItem>
-          <Button type="submit" className="w-full py-3 rounded-md">
-            Login
+          <Button
+            type="submit"
+            className="w-full py-3 rounded-md"
+            disabled={loginMutation.isPending}
+          >
+            {loginMutation.isPending ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Logging in...
+              </>
+            ) : (
+              "Login"
+            )}
           </Button>
         </AnimatedItem>
 
@@ -96,9 +120,25 @@ const Login = () => {
             type="button"
             variant="outline"
             className="w-full border py-3 rounded-md flex items-center justify-center gap-2"
+            onClick={handleGoogleLogin}
+            disabled={googleAuthMutation.isPending}
           >
-            <img src="/google-icon.svg" alt="Google" width={24} height={24} />
-            Sign In with Google
+            {googleAuthMutation.isPending ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Logging in...
+              </>
+            ) : (
+              <>
+                <img
+                  src="/google-icon.svg"
+                  alt="Google"
+                  width={24}
+                  height={24}
+                />
+                Sign In with Google
+              </>
+            )}
           </Button>
         </AnimatedItem>
       </form>

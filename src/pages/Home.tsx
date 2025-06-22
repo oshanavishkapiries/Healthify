@@ -1,11 +1,18 @@
 import BmiCalculator from "@/components/BmiCalculator";
+import CompleteAccountBanner from "@/components/CompleteAccountBanner";
+import EmailVerifyBanner from "@/components/EmailVerifyBanner";
 import { HomeBlogCard } from "@/components/HomeBlogCard";
 import { sampleBlogPosts } from "@/dump/types";
+import { useUserStore } from "@/store/userStore";
 
 const Home = () => {
+  const { user } = useUserStore();
   return (
     <div className="min-h-screen">
       <main className="max-w-7xl mx-auto px-4 py-8">
+        {!user?.isProfileCompleted && <CompleteAccountBanner />}
+        {!user?.isEmailVerified && user?.isProfileCompleted && <EmailVerifyBanner />}
+
         {/* BMI Calculator */}
         <BmiCalculator />
         {/* card grid */}

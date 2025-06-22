@@ -6,18 +6,26 @@ import AnimatedContainer, {
 } from "@/components/common/animated-container";
 import InputDropdown from "@/components/common/input-dropdown";
 import InputText from "@/components/common/input-text";
+import InputDatePicker from "@/components/common/input-datepicker";
 import {
   signupDetailsSchema,
   type SignupDetailsFormData,
 } from "@/validations/signupDetailsSchema";
-
-const genderOptions = [
-  { label: "Male", value: "Male" },
-  { label: "Female", value: "Female" },
-  { label: "Other", value: "Other" },
-];
+import { genderOptions } from "@/types/constant";
+import { useUpdateUserProfileAuth } from "@/hooks/query/useUser";
+import { Loader2 } from "lucide-react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { toast } from "sonner";
+import { useUserStore } from "@/store/userStore";
 
 const SignupDetails = () => {
+  const updateProfile = useUpdateUserProfileAuth();
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const { user } = useUserStore();
+
+  const userId = searchParams.get("userId") || "";
+
   const {
     handleSubmit,
     formState: { errors },
@@ -29,14 +37,33 @@ const SignupDetails = () => {
       firstName: "",
       lastName: "",
       gender: "",
-      age: "",
+      birthDate: "",
       mobileNumber: "",
     },
   });
 
-  const onSubmit = (data: SignupDetailsFormData) => {
-    // Handle signup details logic here
-    console.log(data);
+  const onSubmit = async (data: SignupDetailsFormData) => {
+    try {
+
+      await updateProfile.mutateAsync({
+        userId: userId || "",
+        firstName: data.firstName,
+        lastName: data.lastName,
+        gender: parseInt(data.gender) || 0,
+        dob: data.birthDate,
+        phoneNumber: data.mobileNumber,
+        countryCode: "LK",
+        dialCode: "+94",
+      });
+      if (user) {
+        navigate("/");
+      } else {
+        navigate("/auth/login");
+      }
+    } catch (error) {
+      console.error("API Error:", error);
+      toast.error("Failed to update profile");
+    }
   };
 
   return (
@@ -86,14 +113,12 @@ const SignupDetails = () => {
           </AnimatedItem>
 
           <AnimatedItem>
-            <InputText
-              label="Age"
-              type="number"
-              placeholder="Enter age"
-              value={watch("age")}
-              onChange={(value) => setValue("age", value)}
+            <InputDatePicker
+              label="Birth Date"
+              value={watch("birthDate")}
+              onChange={(value) => setValue("birthDate", value)}
               required
-              error={errors.age?.message}
+              error={errors.birthDate?.message}
             />
           </AnimatedItem>
         </div>
@@ -111,8 +136,19 @@ const SignupDetails = () => {
         </AnimatedItem>
 
         <AnimatedItem>
-          <Button type="submit" className="w-full py-3 rounded-md">
-            Continue
+          <Button
+            type="submit"
+            className="w-full py-3 rounded-md"
+            disabled={updateProfile.isPending}
+          >
+            {updateProfile.isPending ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              "Continue"
+            )}
           </Button>
         </AnimatedItem>
       </form>

@@ -2,13 +2,12 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const axiosClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000",
+  baseURL: import.meta.env.VITE_BACKEND_URL || "",
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// Request interceptor
 axiosClient.interceptors.request.use(
   (config) => {
     const token = Cookies.get("authToken");
@@ -27,7 +26,7 @@ axiosClient.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       Cookies.remove("authToken");
-      window.location.href = "/auth/login";
+      //window.location.href = "/auth/login";
     }
     return Promise.reject(error);
   }

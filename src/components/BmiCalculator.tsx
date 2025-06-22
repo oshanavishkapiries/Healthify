@@ -1,4 +1,4 @@
-import BmiCalPopup from "./BmiCalPopup";
+import BmiCalPopup from "@/components/BmiCalPopup";
 
 const BmiCalculator = () => {
   return (

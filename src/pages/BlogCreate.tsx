@@ -1,9 +1,18 @@
-
+import { useUserStore } from "@/store/userStore";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const BlogCreate = () => {
-  return (
-    <div>BlogCreate</div>
-  )
-}
+  const { user } = useUserStore();
+  const navigate = useNavigate();
 
-export default BlogCreate
+  useEffect(() => {
+    if (user?.roleId?.role !== "ADMIN") {
+      navigate("/");
+    }
+  }, [user]);
+
+  return <div>BlogCreate</div>;
+};
+
+export default BlogCreate;

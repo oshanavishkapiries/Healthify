@@ -12,15 +12,9 @@ export const signupDetailsSchema = z.object({
     .min(2, "Last name must be at least 2 characters")
     .max(50, "Last name must be less than 50 characters"),
   gender: z.string().min(1, "Please select a gender"),
-  age: z
+  birthDate: z
     .string()
-    .min(1, "Age is required")
-    .refine(
-      (val) => !isNaN(Number(val)) && Number(val) >= 18 && Number(val) <= 120,
-      {
-        message: "Age must be between 18 and 120",
-      }
-    ),
+    .min(1, "birthDate is required"),
   mobileNumber: z
     .string()
     .min(1, "Mobile number is required")
