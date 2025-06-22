@@ -3,7 +3,7 @@ import { SearchDropdown } from "@/components/common/search-dropdown";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { CategoryFilter } from "@/components/common/category-filter";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useUserStore } from "@/store/userStore";
 import EmailVerifyBanner from "@/components/EmailVerifyBanner";
@@ -15,9 +15,15 @@ import BlogPageLoader from "@/components/BlogPageLoader";
 import ErrorBlogFound from "@/components/ErrorBlogFound";
 import { useGetMetadata } from "@/hooks/query/useMetaData";
 import type { BlogCategory } from "@/types/meta-api-type";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { motion } from "framer-motion";
 
 const Blog = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [page, setPage] = useState(1);
+  const [allBlogs, setAllBlogs] = useState<BlogPost[]>([]);
+  const [hasMore, setHasMore] = useState(true);
+
   const { user } = useUserStore();
   const { data: metaData } = useGetMetadata();
 
@@ -32,8 +38,8 @@ const Blog = () => {
     isLoading,
     error,
   } = useGetBlogs({
-    page: 1,
-    limit: 20,
+    page,
+    limit: 8,
     blogCategoryId:
       selectedCategory !== "All"
         ? categories.find(
@@ -42,15 +48,35 @@ const Blog = () => {
         : undefined,
   });
 
-  const blogs: BlogPost[] = blogsData?.data?.blogs || [];
+  useEffect(() => {
+    if (blogsData?.data) {
+      if (blogsData.data.blogs?.length > 0) {
+        setAllBlogs((prev) => [...prev, ...blogsData.data.blogs]);
+      }
+      setHasMore(page < (blogsData.data.totalPages || 0));
+    }
+  }, [blogsData, page]);
 
-  const searchOptions = blogs.map((blog: BlogPost) => ({
+  const handleCategorySelect = (category: string) => {
+    if (category !== selectedCategory) {
+      setPage(1);
+      setAllBlogs([]);
+      setHasMore(true);
+      setSelectedCategory(category);
+    }
+  };
+
+  const searchOptions = allBlogs.map((blog: BlogPost) => ({
     label: blog.title,
     value: String(blog._id),
   }));
 
   const handleSelect = (option: { label: string; value: string }) => {
     console.log("Selected:", option);
+  };
+
+  const fetchNext = () => {
+    setPage((prev) => prev + 1);
   };
 
   return (
@@ -78,21 +104,39 @@ const Blog = () => {
         <CategoryFilter
           categories={categories}
           selected={selectedCategory}
-          onSelect={setSelectedCategory}
+          onSelect={handleCategorySelect}
         />
-        {isLoading ? (
+
+        {isLoading && page === 1 ? (
           <BlogPageLoader />
         ) : error ? (
           <ErrorBlogFound />
-        ) : blogs.length === 0 ? (
+        ) : allBlogs.length === 0 ? (
           <NoBlogFound />
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {blogs.map((blog: BlogPost) => (
-              <BlogCard key={blog._id} post={blog} />
-            ))}
-          </div>
+          <InfiniteScroll
+            dataLength={allBlogs.length}
+            next={fetchNext}
+            hasMore={hasMore}
+            loader={<></>}
+            scrollThreshold={0.9}
+            scrollableTarget="scrollableDiv"
+          >
+            <motion.div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {allBlogs.map((blog, index) => (
+                <motion.div
+                  key={blog._id}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: (index % 8) * 0.1, duration: 0.4 }}
+                >
+                  <BlogCard post={blog} />
+                </motion.div>
+              ))}
+            </motion.div>
+          </InfiniteScroll>
         )}
+        {isLoading && page > 1 && <BlogPageLoader />}
       </main>
     </div>
   );

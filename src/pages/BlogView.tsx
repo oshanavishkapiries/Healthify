@@ -2,17 +2,25 @@ import { useParams } from "react-router-dom";
 import BlogViewPage from "@/components/BlogViewPage";
 import type { BlogPostView } from "@/types/Blog";
 import { sampleBlogPosts } from "@/dump/types";
+import { pastTime } from "@/utils/pastTime";
+import { Badge } from "@/components/ui/badge";
 
 const BlogView = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams();
+
+  const post = sampleBlogPosts.find((p) => p._id === id);
+
+  if (!post) {
+    return <div>Post not found</div>;
+  }
 
   const blogPost: BlogPostView = {
-    id: Number(id) - 1,
-    title: sampleBlogPosts[Number(id) - 1].title,
-    description: sampleBlogPosts[Number(id) - 1].description,
-    date: sampleBlogPosts[Number(id) - 1].date,
-    image: sampleBlogPosts[Number(id) - 1].image,
-    category: sampleBlogPosts[Number(id) - 1].category,
+    _id: post._id,
+    title: post.title,
+    description: post.description,
+    date: post.date,
+    image: post.image,
+    categoryId: post.categoryId,
     content: `
       <p>The web development landscape is constantly evolving, and 2024 promises to bring exciting new trends and technologies that will reshape how we build and interact with web applications.</p>
       
@@ -38,6 +46,10 @@ const BlogView = () => {
   return (
     <div className="min-h-screen">
       <BlogViewPage blogPost={blogPost} />
+      <div className="mt-6 flex items-center justify-between text-sm text-muted-foreground">
+        <p>{pastTime(post.date)}</p>
+        <Badge variant="secondary">{post.categoryId.category}</Badge>
+      </div>
     </div>
   );
 };

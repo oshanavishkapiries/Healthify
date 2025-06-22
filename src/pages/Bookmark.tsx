@@ -27,7 +27,7 @@ const Bookmark = () => {
         {/* card grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {sampleBlogPosts.slice(0, 4).map((post) => (
-            <BlogCard key={post.id} post={post} />
+            <BlogCard key={post._id} post={post} />
           ))}
         </div>
       </main>
