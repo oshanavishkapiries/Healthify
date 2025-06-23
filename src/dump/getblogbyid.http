@@ -1,0 +1,25 @@
+GET https://server-heathify.ddnsfree.com/api/blog/666000a72f1b4c1f1a1a1061
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODU4NDYzY2FhOTUwOWE2YjdkYTdkNTAiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImlhdCI6MTc1MDYxODI2MCwiZXhwIjoxNzUwNzA0NjYwfQ.Xuu_9OGSVCpgVmOP-ZEZrkuNZS2JxJAGMQu2lyidnBQ
+
+{
+  "success": true,
+  "message": "Blog fetched successfully",
+  "data": {
+    "_id": "666000a72f1b4c1f1a1a1061",
+    "title": "Choosing the Right Moisturizer",
+    "content": "<p>Look for hydrating ingredients like glycerin or hyaluronic acid.</p>",
+    "description": "How to find a moisturizer for your skin type.",
+    "image": "https://picsum.photos/1600/900?random=61",
+    "userId": "68583aeb814c46783e390ecb",
+    "categoryId": {
+      "_id": "665f05fa2f1b4c1f1a1a0003",
+      "category": "Beauty"
+    },
+    "isActive": false,
+    "date": "2025-06-22T17:18:46.163Z",
+    "createdAt": "2025-06-22T17:18:46.163Z",
+    "updatedAt": "2025-06-23T05:45:28.085Z",
+    "__v": 0
+  },
+  "timestamp": "2025-06-23T06:58:11.995Z"
+}

@@ -2,12 +2,14 @@ import {
   useMutation,
   useQueryClient,
   useInfiniteQuery,
+  useQuery,
 } from "@tanstack/react-query";
 import {
   createBlog,
   getBlogs,
   updateBlog,
   deleteBlog,
+  getBlogById,
 } from "@/services/blog.service";
 import type { UpdateBlogData, GetBlogsParams } from "@/types/blog-api-type";
 import { toast } from "sonner";
@@ -18,11 +20,19 @@ export const useGetBlogs = (params: Omit<GetBlogsParams, "page" | "limit">) => {
     queryFn: ({ pageParam = 1 }) =>
       getBlogs({ ...params, page: pageParam, limit: 8 }),
     getNextPageParam: (lastPage, allPages) => {
-      const currentPage = allPages.length;
-      const totalPages = lastPage.data.totalPages;
+      const currentPage = allPages?.length;
+      const totalPages = lastPage?.data?.totalPages;
       return currentPage < totalPages ? currentPage + 1 : undefined;
     },
     initialPageParam: 1,
+  });
+};
+
+export const useGetBlogById = (blogId: string) => {
+  return useQuery({
+    queryKey: ["blog", blogId],
+    queryFn: () => getBlogById(blogId),
+    enabled: !!blogId,
   });
 };
 

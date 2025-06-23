@@ -1,55 +1,34 @@
 import { useParams } from "react-router-dom";
 import BlogViewPage from "@/components/BlogViewPage";
-import type { BlogPostView } from "@/types/Blog";
-import { sampleBlogPosts } from "@/dump/types";
-import { pastTime } from "@/utils/pastTime";
-import { Badge } from "@/components/ui/badge";
+import { useGetBlogById } from "@/hooks/query/useBlog";
+import BlogViewSkeleton from "@/components/skeleton/BlogViewSkeleton";
+import { useEffect } from "react";
+import ErrorBlogNotFound from "@/components/ErrorBlogNotFound";
 
 const BlogView = () => {
   const { id } = useParams();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
-  const post = sampleBlogPosts.find((p) => p._id === id);
+  const {
+    data: blogResponse,
+    isLoading,
+    isError,
+    error,
+  } = useGetBlogById(id || "");
 
-  if (!post) {
-    return <div>Post not found</div>;
+  if (isLoading) {
+    return <BlogViewSkeleton />;
   }
 
-  const blogPost: BlogPostView = {
-    _id: post._id,
-    title: post.title,
-    description: post.description,
-    date: post.date,
-    image: post.image,
-    categoryId: post.categoryId,
-    content: `
-      <p>The web development landscape is constantly evolving, and 2024 promises to bring exciting new trends and technologies that will reshape how we build and interact with web applications.</p>
-      
-      <h2>AI-Powered Development Tools</h2>
-      <p>Artificial Intelligence is revolutionizing the way developers write code. From intelligent code completion to automated testing, AI tools are becoming indispensable in modern development workflows. These tools not only increase productivity but also help reduce bugs and improve code quality.</p>
-      
-      <h2>Server-Side Rendering Renaissance</h2>
-      <p>With frameworks like Next.js, Nuxt.js, and SvelteKit leading the charge, server-side rendering is experiencing a renaissance. The benefits of improved SEO, faster initial page loads, and better user experience are driving more developers to adopt SSR solutions.</p>
-      
-      <h2>WebAssembly Goes Mainstream</h2>
-      <p>WebAssembly (WASM) is finally reaching mainstream adoption, enabling developers to run high-performance applications in the browser. From gaming to complex data processing, WASM is opening up new possibilities for web applications.</p>
-      
-      <h2>The Rise of Edge Computing</h2>
-      <p>Edge computing is transforming how we think about web application architecture. By processing data closer to users, edge computing reduces latency and improves performance, making it an essential consideration for modern web applications.</p>
-      
-      <h2>Micro-Frontends Architecture</h2>
-      <p>As applications grow in complexity, micro-frontends are becoming a popular architectural pattern. This approach allows teams to develop, deploy, and maintain different parts of an application independently, improving scalability and team productivity.</p>
-      
-      <p>The future of web development is bright, with these trends promising to make development more efficient, applications more performant, and user experiences more engaging. As we move forward, staying updated with these trends will be crucial for any web developer looking to remain competitive in the field.</p>
-    `,
-  };
+  if (isError || !blogResponse?.data) {
+    return <ErrorBlogNotFound error={error} />;
+  }
 
   return (
     <div className="min-h-screen">
-      <BlogViewPage blogPost={blogPost} />
-      <div className="mt-6 flex items-center justify-between text-sm text-muted-foreground">
-        <p>{pastTime(post.date)}</p>
-        <Badge variant="secondary">{post.categoryId.category}</Badge>
-      </div>
+      <BlogViewPage blogPost={blogResponse.data} />
     </div>
   );
 };

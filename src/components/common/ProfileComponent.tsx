@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
   DialogContent,
@@ -30,6 +31,7 @@ import { genderOptions } from "@/types/constant";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import CompleteAccountBanner from "../CompleteAccountBanner";
+import { Link } from "react-router-dom";
 
 export default function ProfileComponent({ user }: { user: User }) {
   const id = useId();
@@ -105,6 +107,14 @@ export default function ProfileComponent({ user }: { user: User }) {
         <DialogHeader className="contents space-y-0 text-left">
           <DialogTitle className="border-b px-4 sm:px-6 py-3 sm:py-4 text-base">
             Profile
+            {user?.roleId?.role === "ADMIN" && (
+              <Badge
+                variant="secondary"
+                className="text-xs ml-2 bg-amber-300 text-background"
+              >
+                ADMIN
+              </Badge>
+            )}
           </DialogTitle>
         </DialogHeader>
         <DialogDescription className="sr-only">
@@ -194,15 +204,17 @@ export default function ProfileComponent({ user }: { user: User }) {
                     Email cannot be changed
                   </p>
                 </div>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={handleChangePassword}
-                  className="flex items-center justify-center gap-2 w-full"
-                >
-                  <Lock size={16} />
-                  Change Password
-                </Button>
+                <Link to="/auth/change-password">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleChangePassword}
+                    className="flex items-center justify-center gap-2 w-full"
+                  >
+                    <Lock size={16} />
+                    Change Password
+                  </Button>
+                </Link>
               </form>
             )}
           </div>

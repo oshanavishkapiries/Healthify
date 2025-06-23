@@ -24,3 +24,8 @@ export const deleteBlog = async (blogId: string) => {
   const response = await axiosClient.delete(`/api/blog/${blogId}`);
   return response.data;
 };
+
+export const getBlogById = async (blogId: string) => {
+  const response = await axiosClient.get(`/api/blog/${blogId}`);
+  return response.data;
+};

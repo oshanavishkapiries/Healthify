@@ -7,7 +7,7 @@ const GotoSignIn = () => {
     <div className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)] text-center p-4">
       <div className="p-8 max-w-sm w-full">
         <div className="flex justify-center mb-6">
-          <LockKeyhole className="w-10 h-10 text-primary" />
+          <LockKeyhole className="w-10 h-10 text-muted-foreground" />
         </div>
         <h2 className="font-semibold mb-2">
           Access Restricted

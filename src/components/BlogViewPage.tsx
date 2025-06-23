@@ -1,14 +1,14 @@
 import { Badge } from "@/components/ui/badge";
-import { Calendar } from "lucide-react";
+import { ArrowLeft, Calendar, Timer } from "lucide-react";
 import { OptimizedImage } from "@/components/common/optimized-image";
 import type { BlogPostView } from "@/types/Blog";
 import { formatDate } from "@/utils/formatDate";
-import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "./ui/button";
+import { pastTime } from "@/utils/pastTime";
 
 export default function BlogViewPage({ blogPost }: { blogPost: BlogPostView }) {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  const navigate = useNavigate();
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
@@ -20,6 +20,15 @@ export default function BlogViewPage({ blogPost }: { blogPost: BlogPostView }) {
             alt={blogPost.title}
             className="object-cover"
           />
+          {/* Back button */}
+          <Button
+            variant="secondary"
+            size="icon"
+            className="rounded-lg shadow-none absolute top-2 left-2"
+            onClick={() => navigate(-1)}
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
         </div>
 
         {/* Blog Header */}
@@ -36,6 +45,11 @@ export default function BlogViewPage({ blogPost }: { blogPost: BlogPostView }) {
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Calendar className="h-4 w-4" />
               <time dateTime={blogPost.date}>{formatDate(blogPost.date)}</time>
+            </div>
+
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Timer className="h-4 w-4" />
+              <p>{pastTime(blogPost.date)}</p>
             </div>
           </div>
         </header>

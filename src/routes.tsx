@@ -10,6 +10,8 @@ import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
 import SignupDetails from "./pages/auth/SignupDetails";
 import ForgetPassword from "./pages/auth/ForgetPassword";
+import EmailVerify from "./pages/auth/EmailVerify";
+import ChangePassword from "./pages/auth/ChangePassword";
 import Blog from "./pages/Blog";
 import BlogView from "./pages/BlogView";
 import Bookmark from "./pages/Bookmark";
@@ -69,6 +71,14 @@ export const router = createBrowserRouter([
       {
         path: "forget-password",
         element: <ForgetPassword />,
+      },
+      {
+        path: "verify-email",
+        element: <EmailVerify />,
+      },
+      {
+        path: "change-password",
+        element: <ChangePassword />,
       },
     ],
   },

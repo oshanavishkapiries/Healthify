@@ -1,5 +1,5 @@
 import { BlogCard } from "@/components/BlogCard";
-import { sampleBlogPosts } from "@/dump/types";
+import { sampleBlogPosts } from "@/dump/sampleBlogPosts";
 import BookMarkBanner from "@/components/BookMarkBanner";
 import { SearchInput } from "@/components/common/SearchInput";
 import { useUserStore } from "@/store/userStore";
