@@ -1,3 +1,4 @@
+import BlogEditor from "@/components/editor/BlogEditor";
 import { useAdmin } from "@/hooks/useAdmin";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -12,7 +13,9 @@ const BlogCreate = () => {
     }
   }, [isAdmin, navigate]);
 
-  return <div>BlogCreate</div>;
+  return <div className="min-h-screen">
+    <BlogEditor />
+  </div>;
 };
 
 export default BlogCreate;
