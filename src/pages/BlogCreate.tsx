@@ -1,16 +1,16 @@
-import { useUserStore } from "@/store/userStore";
+import { useAdmin } from "@/hooks/useAdmin";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const BlogCreate = () => {
-  const { user } = useUserStore();
+  const { isAdmin } = useAdmin();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user?.roleId?.role !== "ADMIN") {
+    if (!isAdmin) {
       navigate("/");
     }
-  }, [user]);
+  }, [isAdmin, navigate]);
 
   return <div>BlogCreate</div>;
 };

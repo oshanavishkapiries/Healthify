@@ -1,5 +1,4 @@
-import { CircleAlertIcon, Loader2 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { CircleAlertIcon } from "lucide-react";
 
 import {
   AlertDialog,
@@ -20,31 +19,16 @@ export default function BlogDeleteWarningAlert({
   onConfirm: () => Promise<void> | void;
   children: React.ReactNode;
 }) {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-
   const handleConfirm = async () => {
-    setIsLoading(true);
     try {
       await onConfirm();
-      setTimeout(() => {
-        setIsOpen(false);
-        setIsLoading(false);
-      }, 3000);
     } catch (error) {
       console.error("Delete failed:", error);
-      setIsLoading(false);
     }
   };
 
-  useEffect(() => {
-    if (!isOpen) {
-      setIsLoading(false);
-    }
-  }, [isOpen]);
-
   return (
-    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+    <AlertDialog>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent>
         <div className="flex flex-col gap-2 max-sm:items-center sm:flex-row sm:gap-4">
@@ -63,20 +47,12 @@ export default function BlogDeleteWarningAlert({
           </AlertDialogHeader>
         </div>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             onClick={handleConfirm}
-            disabled={isLoading}
           >
-            {isLoading ? (
-              <>
-                <Loader2 size={16} className="mr-2 animate-spin" />
-                Deleting...
-              </>
-            ) : (
-              "Delete"
-            )}
+            Delete
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

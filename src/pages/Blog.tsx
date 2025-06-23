@@ -15,6 +15,7 @@ import type { BlogCategory } from "@/types/meta-api-type";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { motion } from "framer-motion";
 import { SearchInput } from "@/components/common/SearchInput";
+import { useAdmin } from "@/hooks/useAdmin";
 
 const Blog = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -22,6 +23,7 @@ const Blog = () => {
   const selectedCategory = searchParams.get("category") || "All";
 
   const { user } = useUserStore();
+  const { isAdmin } = useAdmin();
   const { data: metaData } = useGetMetadata();
 
   const categories =
@@ -68,7 +70,7 @@ const Blog = () => {
         )}
         <div className="flex items-center justify-center gap-3 mb-4 h-[80px]">
           <SearchInput />
-          {user?.roleId?.role === "ADMIN" && (
+          {isAdmin && (
             <Link to="/blog/create">
               <Button className="rounded-lg aspect-square md:w-[150px] py-5">
                 <PlusIcon

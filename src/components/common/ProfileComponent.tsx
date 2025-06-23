@@ -32,11 +32,13 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import CompleteAccountBanner from "../CompleteAccountBanner";
 import { Link } from "react-router-dom";
+import { useAdmin } from "@/hooks/useAdmin";
 
 export default function ProfileComponent({ user }: { user: User }) {
   const id = useId();
   const logout = useLogout();
   const updateProfile = useUpdateUserProfileAuth();
+  const { isAdmin } = useAdmin();
 
   const formatUserDataForForm = (user: User): ProfileFormData => {
     return {
@@ -107,7 +109,7 @@ export default function ProfileComponent({ user }: { user: User }) {
         <DialogHeader className="contents space-y-0 text-left">
           <DialogTitle className="border-b px-4 sm:px-6 py-3 sm:py-4 text-base">
             Profile
-            {user?.roleId?.role === "ADMIN" && (
+            {isAdmin && (
               <Badge
                 variant="secondary"
                 className="text-xs ml-2 bg-amber-300 text-background"

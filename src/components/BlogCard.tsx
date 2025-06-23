@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { OptimizedImage } from "./common/optimized-image";
 import { pastTime } from "@/utils/pastTime";
 import BlogOptionButton from "./BlogOptionButton";
-import { useUserStore } from "@/store/userStore";
+import { useAdmin } from "@/hooks/useAdmin";
 import { Bookmark } from "lucide-react";
 import { Button } from "./ui/button";
 
@@ -13,8 +13,7 @@ interface BlogCardProps {
 }
 
 export const BlogCard = ({ post }: BlogCardProps) => {
-  const { user } = useUserStore();
-  const isAdmin = user?.roleId?.role === "ADMIN";
+  const { isAdmin } = useAdmin();
 
   return (
     <div className="rounded-lg border bg-card text-card-foreground shadow-sm flex flex-col h-full">
@@ -44,7 +43,7 @@ export const BlogCard = ({ post }: BlogCardProps) => {
       <Link to={`/blog/${post._id}`} className="block">
         <div className="p-4 flex flex-col flex-grow">
           <h3 className="text-lg font-semibold mb-2 line-clamp-2 h-[56px]">
-            <Link to={`/blog/${post._id}`}>{post.title}</Link>
+            {post.title}
           </h3>
           <p className="text-muted-foreground text-sm mb-4 line-clamp-3 flex-grow">
             {post.description}
