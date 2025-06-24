@@ -19,6 +19,7 @@ import { useAdmin } from "@/hooks/useAdmin";
 const Blog = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get("search") || "";
+  const selectedBmi = searchParams.get("bmi") || "";
   const selectedCategory = searchParams.get("category") || "All";
 
   const { user } = useUserStore();
@@ -33,13 +34,14 @@ const Blog = () => {
     isLoading,
     isFetchingNextPage,
   } = useGetBlogs({
-    blogCategoryId:
+    categoryId:
       selectedCategory !== "All"
         ? categories.find(
             (cat: { value: string }) => cat.value === selectedCategory
           )?.value
         : undefined,
     search: searchQuery,
+    bmi: selectedBmi,
   });
 
   const allBlogs =

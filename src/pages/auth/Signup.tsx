@@ -8,8 +8,9 @@ import AnimatedContainer, {
 import EmailInput from "@/components/common/input-email";
 import PasswordInput from "@/components/common/input-password";
 import { signupSchema, type SignupFormData } from "@/validations/signupSchema";
-import { useRegisterPatient, useGoogleAuth } from "@/hooks/query/useAuth";
+import { useRegisterPatient } from "@/hooks/query/useAuth";
 import { Loader2 } from "lucide-react";
+import GoogleAuth from "@/components/auth/GoogleAuth";
 
 const Signup = () => {
   const {
@@ -27,19 +28,12 @@ const Signup = () => {
   });
 
   const registerPatientMutation = useRegisterPatient();
-  const googleAuthMutation = useGoogleAuth();
 
   const onSubmit = (data: SignupFormData) => {
     registerPatientMutation.mutate({
       email: data.email,
       password: data.password,
       signUpVia: 1,
-    });
-  };
-
-  const handleGoogleSignup = () => {
-    googleAuthMutation.mutate({
-      token: "",
     });
   };
 
@@ -110,37 +104,14 @@ const Signup = () => {
             <div className="w-full border-t border-border" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-background text-muted-foreground">
-              Or continue with
-            </span>
+            <span className="px-2 text-muted-foreground">Or continue with</span>
           </div>
         </div>
 
         <AnimatedItem>
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full border py-3 rounded-md flex items-center justify-center gap-2"
-            onClick={handleGoogleSignup}
-            disabled={googleAuthMutation.isPending}
-          >
-            {googleAuthMutation.isPending ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Signing up...
-              </>
-            ) : (
-              <>
-                <img
-                  src="/google-icon.svg"
-                  alt="Google"
-                  width={24}
-                  height={24}
-                />
-                Sign Up with Google
-              </>
-            )}
-          </Button>
+          <div className="flex justify-center">
+            <GoogleAuth />
+          </div>
         </AnimatedItem>
       </form>
 

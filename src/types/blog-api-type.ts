@@ -22,7 +22,8 @@ export interface UpdateBlogData {
 export interface GetBlogsParams {
   page?: number;
   limit?: number;
-  blogCategoryId?: string;
+  categoryId?: string;
   tags?: string;
   search?: string;
+  bmi?: string;
 }

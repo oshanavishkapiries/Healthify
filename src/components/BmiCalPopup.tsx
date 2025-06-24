@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { motion, AnimatePresence } from "framer-motion";
+import { bmiOptions } from "@/types/constant";
 
 interface BMIResult {
   value: number;
@@ -37,22 +38,17 @@ export default function BmiCalPopup() {
     const heightInMeters = height / 100;
     const bmi = weight / (heightInMeters * heightInMeters);
 
-    let category: string;
-    let color: string;
+    // Define thresholds and categories in order
+    const bmiCategories = [
+      { max: 18.5, label: "Underweight", color: "text-blue-600" },
+      { max: 25, label: "Normal weight", color: "text-green-600" },
+      { max: 30, label: "Overweight", color: "text-yellow-600" },
+      { max: Infinity, label: "Obese", color: "text-red-600" },
+    ];
 
-    if (bmi < 18.5) {
-      category = "Underweight";
-      color = "text-blue-600";
-    } else if (bmi < 25) {
-      category = "Normal weight";
-      color = "text-green-600";
-    } else if (bmi < 30) {
-      category = "Overweight";
-      color = "text-yellow-600";
-    } else {
-      category = "Obese";
-      color = "text-red-600";
-    }
+    const { label: category, color } =
+      bmiCategories.find((cat) => bmi < cat.max) ||
+      bmiCategories[bmiCategories.length - 1];
 
     return {
       value: Math.round(bmi * 10) / 10,
@@ -76,7 +72,12 @@ export default function BmiCalPopup() {
 
   const handleBlogRedirect = () => {
     if (bmiResult) {
-      navigate(`/blog?bmi=${bmiResult.value}`);
+      let statusValue = null;
+      let normalizedCategory =
+        bmiResult.category === "Normal weight" ? "Normal" : bmiResult.category;
+      const found = bmiOptions.find((opt) => opt.label === normalizedCategory);
+      if (found) statusValue = found.value;
+      navigate(`/blog?bmi=${statusValue}`);
     }
   };
 

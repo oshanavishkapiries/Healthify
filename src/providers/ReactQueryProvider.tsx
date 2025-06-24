@@ -13,6 +13,7 @@ export const ReactQueryProvider = ({
     <QueryClientProvider client={queryClient}>
       <UserProfileInitializer />
       <MetaDataInitializer />
+
       {children}
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

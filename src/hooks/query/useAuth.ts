@@ -42,6 +42,7 @@ export const useLogin = () => {
       navigate("/");
     },
     onError: (error: any) => {
+      console.log(error);
       toast.error(error?.response?.data?.message);
     },
   });
@@ -80,10 +81,10 @@ export const useGoogleAuth = () => {
       setLoading(false);
       toast.success(response.message);
       queryClient.invalidateQueries({ queryKey: ["userProfile"] });
-      navigate("/dashboard");
+      navigate("/");
     },
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.message);
+    onError: () => {
+      toast.error("Something went wrong");
     },
   });
 };

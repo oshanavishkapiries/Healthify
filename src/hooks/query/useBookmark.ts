@@ -10,8 +10,11 @@ import {
 } from "@/services/bookmark.service";
 import { toast } from "sonner";
 import { useMemo } from "react";
+import { useIsAuthenticated } from "@/lib/auth";
 
 export const useGetBookmarks = (params?: object) => {
+  const isAuthenticated = useIsAuthenticated();
+
   return useInfiniteQuery({
     queryKey: ["bookmarks", params],
     queryFn: ({ pageParam = 1 }) =>
@@ -22,6 +25,7 @@ export const useGetBookmarks = (params?: object) => {
       return currentPage < totalPages ? currentPage + 1 : undefined;
     },
     initialPageParam: 1,
+    enabled: isAuthenticated,
   });
 };
 

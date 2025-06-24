@@ -2,6 +2,7 @@ import { updateUserProfile, getUserProfile } from "@/services/user.service";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { useUserStore } from "@/store/userStore";
 import { useEffect } from "react";
+import { useIsAuthenticated } from "@/lib/auth";
 
 export const useUpdateUserProfileAuth = () => {
   const queryClient = useQueryClient();
@@ -15,11 +16,13 @@ export const useUpdateUserProfileAuth = () => {
 
 export const useGetUserProfile = () => {
   const { setUser, setLoading } = useUserStore();
+  const isAuthenticated = useIsAuthenticated();
 
   const query = useQuery({
     queryKey: ["userProfile"],
     queryFn: getUserProfile,
     retry: false,
+    enabled: isAuthenticated,
   });
 
   useEffect(() => {

@@ -9,9 +9,12 @@ import ErrorBlogFound from "@/components/ErrorBlogFound";
 import NoBlogFound from "@/components/NoBlogFound";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { motion } from "framer-motion";
+import { useSearchParams } from "react-router-dom";
 
 const Bookmark = () => {
   const { user } = useUserStore();
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get("search") || "";
 
   const {
     data,
@@ -20,18 +23,21 @@ const Bookmark = () => {
     hasNextPage,
     isLoading,
     isFetchingNextPage,
-  } = useGetBookmarks();
+  } = useGetBookmarks({
+    search: searchQuery,
+  });
 
   if (!user) {
     return <GotoSignIn />;
   }
 
-  const allBookmarks = data?.pages.flatMap((page) => {
-    if (page.data.blogs) {
-      return page.data.blogs;
-    }
-    return [];
-  }) ?? [];
+  const allBookmarks =
+    data?.pages.flatMap((page) => {
+      if (page.data.blogs) {
+        return page.data.blogs;
+      }
+      return [];
+    }) ?? [];
 
   console.log("data", data);
   console.log("allBookmarks", allBookmarks);
