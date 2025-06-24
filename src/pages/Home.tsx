@@ -17,28 +17,29 @@ const Home = () => {
 
   return (
     <div className="min-h-screen">
-      <main className="max-w-7xl mx-auto px-4 py-4">
-        {user && !user?.isProfileCompleted && <CompleteAccountBanner />}
-        {!user?.isEmailVerified && user?.isProfileCompleted && (
-          <EmailVerifyBanner />
-        )}
-
+      {user && !user?.isProfileCompleted && <CompleteAccountBanner />}
+      {!user?.isEmailVerified && user?.isProfileCompleted && (
+        <EmailVerifyBanner />
+      )}
+      <div className="w-full mb-4">
+        <img
+          src={"https://i.ibb.co/kV395LHC/image.jpg"}
+          alt={"healthimage"}
+          className="w-full h-96 object-cover"
+        />
+      </div>
+      <main className="max-w-7xl mx-auto px-4 pb-4">
         <BmiCalculator />
 
         {isLoading ? (
           <BlogPageLoader />
         ) : error ? (
           <ErrorBlogFound />
-        ) : blogs.length > 0 ? (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="h-full">
-              {blogs[0] && <HomeBlogCard post={blogs[0]} isPrimary={true} />}
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {blogs.slice(1, 5).map((post) => (
-                <HomeBlogCard key={post._id} post={post} />
-              ))}
-            </div>
+        ) : blogs.length > 1 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mt-6">
+            {blogs.slice(1, 5).map((post) => (
+              <HomeBlogCard key={post._id} post={post} />
+            ))}
           </div>
         ) : (
           <NoBlogFound />

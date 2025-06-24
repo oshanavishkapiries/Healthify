@@ -1,8 +1,19 @@
 import { AlertCircleIcon, ImageUpIcon, XIcon } from "lucide-react";
+import { useEffect } from "react";
 
 import { useFileUpload } from "@/hooks/use-file-upload";
 
-export default function InputImage() {
+interface InputImageProps {
+  onImageUpload?: (imageUrl: string) => void;
+  defaultImageUrl?: string;
+  error?: string;
+}
+
+export default function InputImage({
+  onImageUpload,
+  defaultImageUrl,
+  error,
+}: InputImageProps) {
   const maxSizeMB = 5;
   const maxSize = maxSizeMB * 1024 * 1024; // 5MB default
 
@@ -22,7 +33,16 @@ export default function InputImage() {
     maxSize,
   });
 
-  const previewUrl = files[0]?.preview || null;
+  const previewUrl = files[0]?.preview || defaultImageUrl || null;
+
+  // Mock image upload - replace with actual API call when ready
+  useEffect(() => {
+    if (files[0]?.preview && onImageUpload) {
+      // For now, use a mock image URL since image upload API is not ready
+      const mockImageUrl = "https://picsum.photos/1600/900?random=38";
+      onImageUpload(mockImageUrl);
+    }
+  }, [files, onImageUpload]);
 
   return (
     <div className="flex flex-col gap-2">
@@ -47,7 +67,7 @@ export default function InputImage() {
             <div className="absolute inset-0 aspect-video">
               <img
                 src={previewUrl}
-                alt={files[0]?.file?.name || "Uploaded image"}
+                alt={files[0]?.file?.name || "Blog image"}
                 className="size-full object-cover"
               />
             </div>
@@ -65,6 +85,9 @@ export default function InputImage() {
               <p className="text-muted-foreground text-xs">
                 Max size: {maxSizeMB}MB
               </p>
+              {error && (
+                <p className="text-destructive text-xs">{error}</p>
+              )}
             </div>
           )}
         </div>
@@ -73,7 +96,12 @@ export default function InputImage() {
             <button
               type="button"
               className="focus-visible:border-ring focus-visible:ring-ring/50 z-50 flex size-8 cursor-pointer items-center justify-center rounded-full bg-black/60 text-white transition-[color,box-shadow] outline-none hover:bg-black/80 focus-visible:ring-[3px]"
-              onClick={() => removeFile(files[0]?.id)}
+              onClick={() => {
+                removeFile(files[0]?.id);
+                if (onImageUpload) {
+                  onImageUpload("");
+                }
+              }}
               aria-label="Remove image"
             >
               <XIcon className="size-4" aria-hidden="true" />

@@ -4,6 +4,7 @@ export interface CreateBlogData {
   imageUrl: string;
   imagePath: string;
   userId: string;
+  bmi: number;
   blogCategoryId: string;
   tags: string[];
 }

@@ -9,3 +9,15 @@ export const useGetMetadata = () => {
     gcTime: 10 * 60 * 1000,
   });
 };
+
+export const useGetBlogCategories = () => {
+  const { data: metaData } = useGetMetadata();
+
+  const categories =
+    metaData?.data?.blogCategories?.map((category: any) => ({
+      label: category.category,
+      value: category._id,
+    })) || [];
+
+  return { categories, isLoading: !metaData };
+};

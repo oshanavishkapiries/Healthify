@@ -47,6 +47,14 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: "blog/edit/:id",
+        element: (
+          <AuthMiddleware>
+            <BlogCreate />
+          </AuthMiddleware>
+        ),
+      },
+      {
         path: "*",
         element: <NotFound />,
       },

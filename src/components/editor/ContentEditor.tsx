@@ -1,12 +1,13 @@
 import React from "react";
 import ReactQuill from "react-quill-new";
-import "react-quill-new/dist/quill.snow.css";
+import "@/quill.snow.css";
 
 interface ContentEditorProps {
   value?: string;
   onChange?: (value: string) => void;
   placeholder?: string;
   className?: string;
+  error?: string;
 }
 
 const ContentEditor: React.FC<ContentEditorProps> = ({
@@ -14,6 +15,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
   onChange,
   placeholder = "Write your blog content here...",
   className,
+  error,
 }) => {
   // Quill modules configuration
   const modules = {
@@ -51,7 +53,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
       <label className="block text-sm font-medium text-foreground mb-2">
         Blog Content
       </label>
-      <div className="">
+     <div className="border-2 rounded-md">
         <ReactQuill
           theme="snow"
           value={value}
@@ -65,6 +67,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
           }}
         />
       </div>
+      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
     </div>
   );
 };

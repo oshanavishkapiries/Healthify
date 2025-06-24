@@ -10,8 +10,7 @@ import NoBlogFound from "@/components/NoBlogFound";
 import { useGetBlogs } from "@/hooks/query/useBlog";
 import BlogPageLoader from "@/components/BlogPageLoader";
 import ErrorBlogFound from "@/components/ErrorBlogFound";
-import { useGetMetadata } from "@/hooks/query/useMetaData";
-import type { BlogCategory } from "@/types/meta-api-type";
+import { useGetBlogCategories } from "@/hooks/query/useMetaData";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { motion } from "framer-motion";
 import { SearchInput } from "@/components/common/SearchInput";
@@ -24,13 +23,7 @@ const Blog = () => {
 
   const { user } = useUserStore();
   const { isAdmin } = useAdmin();
-  const { data: metaData } = useGetMetadata();
-
-  const categories =
-    metaData?.data?.blogCategories?.map((category: BlogCategory) => ({
-      label: category.category,
-      value: category._id,
-    })) || [];
+  const { categories } = useGetBlogCategories();
 
   const {
     data,
@@ -49,7 +42,13 @@ const Blog = () => {
     search: searchQuery,
   });
 
-  const allBlogs = data?.pages.flatMap((page) => page.data.blogs) ?? [];
+  const allBlogs =
+    data?.pages.flatMap((page) => {
+      if (page.data.blogs) {
+        return page.data.blogs;
+      }
+      return [];
+    }) ?? [];
 
   const handleCategorySelect = (category: string) => {
     const params = new URLSearchParams(searchParams);

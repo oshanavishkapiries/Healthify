@@ -9,6 +9,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useDeleteBlog } from "@/hooks/query/useBlog";
 import BlogDeleteWarningAlert from "./alerts/BlogDeleteWarningAlert";
+import { useNavigate } from "react-router-dom";
+import {
+  useSetBookmark,
+  useRemoveBookmark,
+  useIsBookmarked,
+} from "@/hooks/query/useBookmark";
 
 interface BlogOptionButtonProps {
   blogId: string;
@@ -16,9 +22,27 @@ interface BlogOptionButtonProps {
 
 export default function BlogOptionButton({ blogId }: BlogOptionButtonProps) {
   const deleteBlogMutation = useDeleteBlog();
+  const navigate = useNavigate();
+
+  const setBookmarkMutation = useSetBookmark();
+  const removeBookmarkMutation = useRemoveBookmark();
+  const { isBookmarked, bookmarkInfo } = useIsBookmarked(blogId);
+  const bookmarkId = bookmarkInfo?._id;
 
   const handleDelete = async () => {
     await deleteBlogMutation.mutateAsync(blogId);
+  };
+
+  const handleBookmark = async () => {
+    if (isBookmarked) {
+      await removeBookmarkMutation.mutateAsync(bookmarkId);
+    } else {
+      await setBookmarkMutation.mutateAsync(blogId);
+    }
+  };
+
+  const handleEdit = async () => {
+    navigate(`/blog/edit/${blogId}`);
   };
 
   return (
@@ -27,19 +51,32 @@ export default function BlogOptionButton({ blogId }: BlogOptionButtonProps) {
         <Button
           size="icon"
           variant="secondary"
-          className="rounded-full shadow-none"
+          className={`rounded-full shadow-none ${
+            isBookmarked
+              ? "bg-primary text-primary-foreground hover:bg-primary/90"
+              : ""
+          }`}
           aria-label="Open edit menu"
         >
           <EllipsisIcon size={16} aria-hidden="true" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem>
-          <Bookmark size={16} className="mr-2" />
+        <DropdownMenuItem
+          onClick={handleBookmark}
+          disabled={
+            setBookmarkMutation.isPending || removeBookmarkMutation.isPending
+          }
+        >
+          <Bookmark
+            size={16}
+            className="mr-2"
+            fill={isBookmarked ? "currentColor" : "none"}
+          />
           Bookmark
         </DropdownMenuItem>
 
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={handleEdit}>
           <Edit size={16} className="mr-2" />
           Edit
         </DropdownMenuItem>
