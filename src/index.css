@@ -119,7 +119,6 @@
   }
 }
 
-
 /* Quill Editor */
 .ql-toolbar.ql-snow {
   border: none;
@@ -127,4 +126,9 @@
 
 .ql-container.ql-snow {
   border: none;
+}
+
+/* google login button css */
+.S9gUrf-YoZ4jf {
+  width: 100%;
 }
