@@ -131,4 +131,6 @@
 /* google login button css */
 .S9gUrf-YoZ4jf {
   width: 100%;
+  display: flex;
+  justify-content: center;
 }

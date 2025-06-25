@@ -15,9 +15,6 @@ const GoogleAuthButton = () => {
         shape="rectangular"
         width="100%"
         locale="en"
-        containerProps={{
-          className: "flex justify-center items-center",
-        }}
       />
     </div>
   );
