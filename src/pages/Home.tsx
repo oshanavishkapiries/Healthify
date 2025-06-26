@@ -13,7 +13,9 @@ const Home = () => {
   const { user } = useUserStore();
   const { data, isLoading, error } = useGetBlogs({});
 
-  const blogs: BlogPost[] = data?.pages[0]?.data?.blogs.slice(0, 5) || [];
+  const blogs: BlogPost[] = data?.pages[0]?.data?.blogs.slice(0, 4) || [];
+
+  console.log(blogs);
 
   return (
     <div className="min-h-screen">
@@ -35,9 +37,9 @@ const Home = () => {
           <BlogPageLoader />
         ) : error ? (
           <ErrorBlogFound />
-        ) : blogs.length > 1 ? (
+        ) : blogs.length >= 1 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mt-6">
-            {blogs.slice(1, 5).map((post) => (
+            {blogs.map((post) => (
               <HomeBlogCard key={post._id} post={post} />
             ))}
           </div>

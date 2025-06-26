@@ -62,7 +62,6 @@ const Blog = () => {
     setSearchParams(params, { replace: true });
   };
 
-  console.log(allBlogs);
   return (
     <div className="min-h-screen">
       <main className="max-w-7xl mx-auto px-4 py-4">

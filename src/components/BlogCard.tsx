@@ -11,6 +11,7 @@ import {
   useIsBookmarked,
 } from "@/hooks/query/useBookmark";
 import { useState, useEffect } from "react";
+import { useIsAuthenticated } from "@/lib/auth";
 
 interface BlogCardProps {
   post: BlogPost;
@@ -19,7 +20,7 @@ interface BlogCardProps {
 export const BlogCard = ({ post }: BlogCardProps) => {
   const setBookmarkMutation = useSetBookmark();
   const removeBookmarkMutation = useRemoveBookmark();
-
+  const isAuthenticated = useIsAuthenticated();
   const { isBookmarked, bookmarkInfo } = useIsBookmarked(post._id);
   const [uiBookmarked, setUiBookmarked] = useState(isBookmarked);
 
@@ -55,19 +56,21 @@ export const BlogCard = ({ post }: BlogCardProps) => {
           />
         </Link>
         <div className="absolute top-2 right-2">
-          <Button
-            size="icon"
-            variant={uiBookmarked ? "default" : "secondary"}
-            className="rounded-full shadow-none"
-            aria-label="Bookmark"
-            onClick={handleBookmark}
-          >
-            {uiBookmarked ? (
-              <BookmarkFilled size={16} fill="currentColor" />
-            ) : (
-              <Bookmark size={16} />
-            )}
-          </Button>
+          {isAuthenticated && (
+            <Button
+              size="icon"
+              variant={uiBookmarked ? "default" : "secondary"}
+              className="rounded-full shadow-none"
+              aria-label="Bookmark"
+              onClick={handleBookmark}
+            >
+              {uiBookmarked ? (
+                <BookmarkFilled size={16} fill="currentColor" />
+              ) : (
+                <Bookmark size={16} />
+              )}
+            </Button>
+          )}
         </div>
       </div>
       <Link to={`/blog/${post._id}`} className="block">

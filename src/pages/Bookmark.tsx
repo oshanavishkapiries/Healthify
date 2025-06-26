@@ -39,8 +39,6 @@ const Bookmark = () => {
       return [];
     }) ?? [];
 
-  console.log("data", data);
-  console.log("allBookmarks", allBookmarks);
 
   return (
     <div className="min-h-screen">

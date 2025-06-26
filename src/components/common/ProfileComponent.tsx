@@ -90,11 +90,6 @@ export default function ProfileComponent({ user }: { user: User }) {
     logout();
   };
 
-  const handleChangePassword = () => {
-    // Handle change password logic
-    console.log("Change password clicked");
-  };
-
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -112,7 +107,7 @@ export default function ProfileComponent({ user }: { user: User }) {
             {isAdmin && (
               <Badge
                 variant="secondary"
-                className="text-xs ml-2 bg-amber-300 text-background"
+                className="text-xs ml-2 bg-amber-300 text-black"
               >
                 ADMIN
               </Badge>
@@ -210,7 +205,6 @@ export default function ProfileComponent({ user }: { user: User }) {
                   <Button
                     type="button"
                     variant="outline"
-                    onClick={handleChangePassword}
                     className="flex items-center justify-center gap-2 w-full"
                   >
                     <Lock size={16} />
