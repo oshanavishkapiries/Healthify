@@ -3,8 +3,6 @@ import type { BlogPost } from "@/types/Blog";
 import { Link } from "react-router-dom";
 import { OptimizedImage } from "./common/optimized-image";
 import { pastTime } from "@/utils/pastTime";
-import BlogOptionButton from "./BlogOptionButton";
-import { useAdmin } from "@/hooks/useAdmin";
 import { Bookmark, Bookmark as BookmarkFilled } from "lucide-react";
 import { Button } from "./ui/button";
 import {
@@ -12,27 +10,39 @@ import {
   useRemoveBookmark,
   useIsBookmarked,
 } from "@/hooks/query/useBookmark";
+import { useState, useEffect } from "react";
 
 interface BlogCardProps {
   post: BlogPost;
 }
 
 export const BlogCard = ({ post }: BlogCardProps) => {
-  const { isAdmin } = useAdmin();
   const setBookmarkMutation = useSetBookmark();
   const removeBookmarkMutation = useRemoveBookmark();
 
   const { isBookmarked, bookmarkInfo } = useIsBookmarked(post._id);
+  const [uiBookmarked, setUiBookmarked] = useState(isBookmarked);
 
   const bookmarkId = bookmarkInfo?._id;
 
   const handleBookmark = async () => {
-    if (isBookmarked) {
-      await removeBookmarkMutation.mutateAsync(bookmarkId);
-    } else {
-      await setBookmarkMutation.mutateAsync(post._id);
+    const currentState = uiBookmarked;
+    setUiBookmarked(!currentState);
+
+    try {
+      if (currentState) {
+        await removeBookmarkMutation.mutateAsync(bookmarkId);
+      } else {
+        await setBookmarkMutation.mutateAsync(post._id);
+      }
+    } catch (error) {
+      setUiBookmarked(currentState);
     }
   };
+
+  useEffect(() => {
+    setUiBookmarked(isBookmarked);
+  }, [isBookmarked]);
 
   return (
     <div className="rounded-lg border bg-card text-card-foreground shadow-sm flex flex-col h-full">
@@ -45,27 +55,19 @@ export const BlogCard = ({ post }: BlogCardProps) => {
           />
         </Link>
         <div className="absolute top-2 right-2">
-          {isAdmin ? (
-            <BlogOptionButton blogId={post._id} />
-          ) : (
-            <Button
-              size="icon"
-              variant={isBookmarked ? "default" : "secondary"}
-              className="rounded-full shadow-none"
-              aria-label="Bookmark"
-              onClick={handleBookmark}
-              disabled={
-                setBookmarkMutation.isPending ||
-                removeBookmarkMutation.isPending
-              }
-            >
-              {isBookmarked ? (
-                <BookmarkFilled size={16} fill="currentColor" />
-              ) : (
-                <Bookmark size={16} />
-              )}
-            </Button>
-          )}
+          <Button
+            size="icon"
+            variant={uiBookmarked ? "default" : "secondary"}
+            className="rounded-full shadow-none"
+            aria-label="Bookmark"
+            onClick={handleBookmark}
+          >
+            {uiBookmarked ? (
+              <BookmarkFilled size={16} fill="currentColor" />
+            ) : (
+              <Bookmark size={16} />
+            )}
+          </Button>
         </div>
       </div>
       <Link to={`/blog/${post._id}`} className="block">

@@ -23,7 +23,7 @@ export const useGetAuthDataByUser = (params: GetAuthDataParams) => {
 };
 
 export const useLogin = () => {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient(); 
   const navigate = useNavigate();
   const { setUser, setLoading } = useUserStore();
 

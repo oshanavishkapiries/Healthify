@@ -1,7 +1,8 @@
 import { AlertCircleIcon, ImageUpIcon, XIcon } from "lucide-react";
-import { useEffect } from "react";
+import { useRef } from "react";
 
 import { useFileUpload } from "@/hooks/use-file-upload";
+import { useUploadImage } from "@/hooks/query/useImage";
 
 interface InputImageProps {
   onImageUpload?: (imageUrl: string) => void;
@@ -16,6 +17,8 @@ export default function InputImage({
 }: InputImageProps) {
   const maxSizeMB = 5;
   const maxSize = maxSizeMB * 1024 * 1024; // 5MB default
+
+  const uploadImageMutation = useUploadImage();
 
   const [
     { files, isDragging, errors },
@@ -34,15 +37,23 @@ export default function InputImage({
   });
 
   const previewUrl = files[0]?.preview || defaultImageUrl || null;
+  const lastUploadedRef = useRef<string | null>(null);
 
-  // Mock image upload - replace with actual API call when ready
-  useEffect(() => {
-    if (files[0]?.preview && onImageUpload) {
-      // For now, use a mock image URL since image upload API is not ready
-      const mockImageUrl = "https://picsum.photos/1600/900?random=38";
-      onImageUpload(mockImageUrl);
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && onImageUpload) {
+      try {
+        const response = await uploadImageMutation.mutateAsync(file);
+        const imageUrl = response.data?.url;
+        if (imageUrl) {
+          onImageUpload(imageUrl);
+          lastUploadedRef.current = file.name;
+        }
+      } catch (error) {
+        console.error("Failed to upload image:", error);
+      }
     }
-  }, [files, onImageUpload]);
+  };
 
   return (
     <div className="flex flex-col gap-2">
@@ -62,6 +73,7 @@ export default function InputImage({
             {...getInputProps()}
             className="sr-only"
             aria-label="Upload file"
+            onChange={handleFileChange}
           />
           {previewUrl ? (
             <div className="absolute inset-0 aspect-video">
@@ -85,8 +97,9 @@ export default function InputImage({
               <p className="text-muted-foreground text-xs">
                 Max size: {maxSizeMB}MB
               </p>
-              {error && (
-                <p className="text-destructive text-xs">{error}</p>
+              {error && <p className="text-destructive text-xs">{error}</p>}
+              {uploadImageMutation.isPending && (
+                <p className="text-muted-foreground text-xs">Uploading...</p>
               )}
             </div>
           )}

@@ -33,9 +33,8 @@ export const useSetBookmark = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: setBookmark,
-    onSuccess: (response) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["bookmarks"] });
-      toast.success(response.message);
     },
     onError: (error: any) => {
       toast.error(error?.response?.data?.message);
@@ -47,9 +46,8 @@ export const useRemoveBookmark = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: removeBookmark,
-    onSuccess: (response) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["bookmarks"] });
-      toast.success(response.message);
     },
     onError: (error: any) => {
       toast.error(error?.response?.data?.message);
@@ -59,7 +57,6 @@ export const useRemoveBookmark = () => {
 
 export const useIsBookmarked = (blogId: string) => {
   const { data } = useGetBookmarks();
-  console.log("data", data);
   const bookmarkInfo = useMemo(() => {
     const allBookmarks = data?.pages.flatMap((page) => page.data.blogs) ?? [];
     return allBookmarks.find((b: any) => b?._id === blogId);

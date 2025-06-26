@@ -1,21 +1,19 @@
 export interface CreateBlogData {
   title: string;
   content: string;
-  imageUrl: string;
-  imagePath: string;
+  image: string;
   userId: string;
   bmi: number;
-  blogCategoryId: string;
+  categoryId: string;
   tags: string[];
 }
 
 export interface UpdateBlogData {
   title: string;
   content: string;
-  imageUrl: string;
-  imagePath: string;
+  image: string;
   userId: string;
-  blogCategoryId: string;
+  categoryId: string;
   tags: string[];
 }
 

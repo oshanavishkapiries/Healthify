@@ -2,14 +2,10 @@ import { useParams } from "react-router-dom";
 import BlogViewPage from "@/components/BlogViewPage";
 import { useGetBlogById } from "@/hooks/query/useBlog";
 import BlogViewSkeleton from "@/components/skeleton/BlogViewSkeleton";
-import { useEffect } from "react";
 import ErrorBlogNotFound from "@/components/ErrorBlogNotFound";
 
 const BlogView = () => {
   const { id } = useParams();
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
 
   const {
     data: blogResponse,

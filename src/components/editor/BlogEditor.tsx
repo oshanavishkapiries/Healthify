@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,7 +20,8 @@ import { useGetBlogCategories } from "@/hooks/query/useMetaData";
 import { useUserStore } from "@/store/userStore";
 import { bmiOptions } from "@/types/constant";
 import BlogViewSkeleton from "../skeleton/BlogViewSkeleton";
-import InputCategorySearch from "@/components/CategorySearch";
+import { queryClient } from "@/lib/react-query/query-client";
+import { Loader2 } from "lucide-react";
 
 const BlogEditor = () => {
   const { id } = useParams();
@@ -32,13 +33,6 @@ const BlogEditor = () => {
   const { data: existingBlog, isLoading } = useGetBlogById(id || "");
   const createBlogMutation = useCreateBlog();
   const updateBlogMutation = useUpdateBlog();
-
-  const [localCategories, setLocalCategories] = useState(categories);
-
-  // Update local categories when categories from API change
-  // useEffect(() => {
-  //   setLocalCategories(categories);
-  // }, [categories]);
 
   const {
     register,
@@ -53,42 +47,13 @@ const BlogEditor = () => {
       title: "",
       content: "",
       description: "",
-      blogCategoryId: "",
+      categoryId: "",
       bmi: "",
-      imageUrl: "",
+      image: "",
     },
   });
 
   const watchedValues = watch();
-
-  const handleAddNewCategory = async (categoryName: string) => {
-    try {
-      // Mock API call - replace with actual backend call later
-      console.log("Adding new category:", categoryName);
-
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      // Generate a mock ID for the new category
-      const newCategoryId = `cat_${Date.now()}`;
-      const newCategory = {
-        value: newCategoryId,
-        label: categoryName,
-      };
-
-      // Add to local state
-      setLocalCategories((prev : any) => [...prev, newCategory]);
-
-      // Set the new category as selected
-      setValue("blogCategoryId", newCategoryId);
-
-      // Show success message
-      toast.success(`Category "${categoryName}" added successfully!`);
-    } catch (error) {
-      console.error("Error adding category:", error);
-      toast.error("Failed to add category. Please try again.");
-    }
-  };
 
   useEffect(() => {
     if (isEditMode && existingBlog?.data) {
@@ -97,9 +62,9 @@ const BlogEditor = () => {
         title: blog.title || "",
         content: blog.content || "",
         description: blog.description || "",
-        blogCategoryId: blog.blogCategoryId || "",
+        categoryId: blog.categoryId._id || "",
         bmi: blog.bmi?.toString() || "",
-        imageUrl: blog.image || "",
+        image: blog.image || "",
       });
     }
   }, [isEditMode, existingBlog, reset]);
@@ -114,10 +79,9 @@ const BlogEditor = () => {
       title: data.title,
       content: data.content,
       description: data.description,
-      imageUrl: data.imageUrl,
-      imagePath: data.imageUrl,
+      image: data.image,
       userId: user._id,
-      blogCategoryId: data.blogCategoryId,
+      categoryId: data.categoryId,
       bmi: parseInt(data.bmi),
       tags: [],
     };
@@ -128,6 +92,8 @@ const BlogEditor = () => {
           blogId: id,
           blogData,
         });
+        // refetch blog
+        queryClient.invalidateQueries({ queryKey: ["blog", id] });
         navigate(`/blog/${id}`);
       } else {
         await createBlogMutation.mutateAsync(blogData);
@@ -145,14 +111,12 @@ const BlogEditor = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 mb-8">
         <div className="relative aspect-video w-full overflow-hidden rounded-xl">
           <InputImage
-            onImageUpload={(url) => setValue("imageUrl", url)}
-            defaultImageUrl={watchedValues.imageUrl}
-            error={errors.imageUrl?.message}
+            onImageUpload={(url) => setValue("image", url)}
+            defaultImageUrl={watchedValues.image}
+            error={errors.image?.message}
           />
-          {errors.imageUrl && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.imageUrl.message}
-            </p>
+          {errors.image && (
+            <p className="text-red-500 text-sm mt-1">{errors.image.message}</p>
           )}
         </div>
 
@@ -169,14 +133,13 @@ const BlogEditor = () => {
           <div className="flex flex-wrap items-center gap-4">
             {/* blog category input */}
             <div className="flex-1 min-w-[200px]">
-              <InputCategorySearch
+              <InputDropdown
                 label="Category"
-                placeholder="Select or add category..."
-                options={localCategories}
-                value={watchedValues.blogCategoryId}
-                onChange={(val) => setValue("blogCategoryId", val)}
-                error={errors.blogCategoryId?.message}
-                onAddNew={handleAddNewCategory}
+                placeholder="Select category..."
+                options={categories}
+                value={watchedValues.categoryId}
+                onChange={(val: string) => setValue("categoryId", val)}
+                error={errors.categoryId?.message}
               />
             </div>
 
@@ -187,7 +150,7 @@ const BlogEditor = () => {
                 placeholder="Select BMI status..."
                 options={bmiOptions}
                 value={watchedValues.bmi}
-                onChange={(val) => setValue("bmi", val)}
+                onChange={(val: string) => setValue("bmi", val)}
                 error={errors.bmi?.message}
               />
             </div>
@@ -227,7 +190,12 @@ const BlogEditor = () => {
         {/* submit button */}
         <Button type="submit" className="w-full py-6" disabled={isSubmitting}>
           {isSubmitting
-            ? "Submitting..."
+            ? (
+              <div className="flex items-center gap-2">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Submitting...
+              </div>
+            )
             : isEditMode
             ? "Update Blog"
             : "Create Blog"}

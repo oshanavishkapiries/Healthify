@@ -61,10 +61,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
           modules={modules}
           formats={formats}
           placeholder={placeholder}
-          className="min-h-[400px] content-editor"
-          style={{
-            height: "400px",
-          }}
+          className="min-h-[415px] content-editor"
         />
       </div>
       {error && <p className="text-red-500 text-sm mt-1">{error}</p>}

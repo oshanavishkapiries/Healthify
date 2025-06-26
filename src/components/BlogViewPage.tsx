@@ -6,9 +6,12 @@ import { formatDate } from "@/utils/formatDate";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import { pastTime } from "@/utils/pastTime";
+import BlogOptionButton from "./BlogOptionButton";
+import { useAdmin } from "@/hooks/useAdmin";
 
 export default function BlogViewPage({ blogPost }: { blogPost: BlogPostView }) {
   const navigate = useNavigate();
+  const { isAdmin } = useAdmin();
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
@@ -29,11 +32,19 @@ export default function BlogViewPage({ blogPost }: { blogPost: BlogPostView }) {
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
+
+          {/* Blog Option Button */}
+          {isAdmin && (
+            <BlogOptionButton
+              className="absolute top-2 right-2 rounded-md"
+              blogId={blogPost._id}
+            />
+          )}
         </div>
 
         {/* Blog Header */}
         <header className="space-y-4">
-          <h1 className="text-3xl font-bold leading-tight tracking-tight md:text-4xl lg:text-5xl">
+          <h1 className="text-3xl font-bold leading-tight tracking-tight md:text-4xl lg:text-5xl break-words whitespace-pre-line">
             {blogPost.title}
           </h1>
 
@@ -56,15 +67,19 @@ export default function BlogViewPage({ blogPost }: { blogPost: BlogPostView }) {
 
         {/* Blog Description */}
         <div className="border-l-4 border-primary/20 pl-6">
-          <p className="text-lg text-muted-foreground leading-relaxed">
+          <p className="text-lg text-muted-foreground leading-relaxed break-words whitespace-pre-line">
             {blogPost.description}
           </p>
         </div>
 
         {/* Blog Content */}
         <div
-          className="prose prose-gray max-w-none dark:prose-invert prose-headings:font-bold prose-headings:tracking-tight prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-4 prose-p:text-base prose-p:leading-7 prose-p:mb-6"
-          dangerouslySetInnerHTML={{ __html: blogPost.content }}
+          className="prose prose-gray max-w-none dark:prose-invert prose-headings:font-bold prose-headings:tracking-tight prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-4 prose-p:text-base prose-p:leading-7 prose-p:mb-6 break-words whitespace-pre-line"
+          dangerouslySetInnerHTML={{
+            __html: blogPost.content.startsWith("<")
+              ? blogPost.content
+              : `<p>${blogPost.content}</p>`,
+          }}
         />
       </article>
     </div>

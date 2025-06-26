@@ -18,9 +18,13 @@ import {
 
 interface BlogOptionButtonProps {
   blogId: string;
+  className?: string;
 }
 
-export default function BlogOptionButton({ blogId }: BlogOptionButtonProps) {
+export default function BlogOptionButton({
+  blogId,
+  className,
+}: BlogOptionButtonProps) {
   const deleteBlogMutation = useDeleteBlog();
   const navigate = useNavigate();
 
@@ -31,6 +35,7 @@ export default function BlogOptionButton({ blogId }: BlogOptionButtonProps) {
 
   const handleDelete = async () => {
     await deleteBlogMutation.mutateAsync(blogId);
+    navigate("/blog");
   };
 
   const handleBookmark = async () => {
@@ -51,7 +56,7 @@ export default function BlogOptionButton({ blogId }: BlogOptionButtonProps) {
         <Button
           size="icon"
           variant="secondary"
-          className={`rounded-full shadow-none ${
+          className={`rounded-full shadow-none ${className} ${
             isBookmarked
               ? "bg-primary text-primary-foreground hover:bg-primary/90"
               : ""
