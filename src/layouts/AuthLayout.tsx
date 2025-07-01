@@ -11,7 +11,7 @@ const AuthLayout = () => {
         <BackButton />
       </div>
       <div className="z-10 w-full max-w-md flex flex-col items-center justify-center">
-        <Logo />
+        <Logo width={60} height={60} />
         <Outlet />
       </div>
     </div>

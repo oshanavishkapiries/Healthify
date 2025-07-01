@@ -13,14 +13,14 @@ export function Logo({
 }: LogoProps) {
   return (
     <div className={className} {...props}>
-      {/* <img
-        src="https://i.ibb.co/4n8YNHrW/avuyjb7vk-removebg-preview.png"
+      <img
+        src="/logo.png"
         alt="Logo"
         width={width}
         height={height}
         className="object-contain"
-      /> */}
-      <h1 className="text-2xl font-bold italic">Healthify</h1>
+      />
+      {/* <h1 className="text-2xl font-bold italic">Healthify</h1> */}
     </div>
   );
 }

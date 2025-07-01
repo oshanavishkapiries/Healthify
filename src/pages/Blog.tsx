@@ -56,6 +56,7 @@ const Blog = () => {
     const params = new URLSearchParams(searchParams);
     if (category === "All") {
       params.delete("category");
+      params.delete("bmi");
     } else {
       params.set("category", category);
     }

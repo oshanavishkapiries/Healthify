@@ -2,13 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { MinusIcon, PlusIcon } from "lucide-react";
-import {
-  Button as RACButton,
-  Group,
-  Input,
-  NumberField,
-} from "react-aria-components";
 import {
   Dialog,
   DialogContent,
@@ -20,6 +13,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { motion, AnimatePresence } from "framer-motion";
 import { bmiOptions } from "@/types/constant";
+import InputDropdown from "@/components/common/input-dropdown";
 
 interface BMIResult {
   value: number;
@@ -28,32 +22,58 @@ interface BMIResult {
 }
 
 export default function BmiCalPopup() {
-  const [weight, setWeight] = useState<number>(70);
-  const [height, setHeight] = useState<number>(170);
+  const [weight, setWeight] = useState<number>(150);
+  const [height, setHeight] = useState<number>(65);
+  const [weightUnit, setWeightUnit] = useState<"lbs" | "kg">("lbs");
+  const [heightUnit, setHeightUnit] = useState<"inches" | "cm">("inches");
   const [bmiResult, setBmiResult] = useState<BMIResult | null>(null);
   const [showResult, setShowResult] = useState(false);
   const navigate = useNavigate();
 
+  // Conversion helpers
+  const toKg = (w: number, unit: string) => (unit === "kg" ? w : w * 0.453592);
+  const toCm = (h: number, unit: string) => (unit === "cm" ? h : h * 2.54);
+
+  const handleWeightUnitChange = (unit: "lbs" | "kg") => {
+    if (unit !== weightUnit) {
+      // Convert value to new unit
+      setWeight(
+        unit === "kg"
+          ? Math.round(weight * 0.453592 * 10) / 10
+          : Math.round((weight / 0.453592) * 10) / 10
+      );
+      setWeightUnit(unit);
+    }
+  };
+  const handleHeightUnitChange = (unit: "inches" | "cm") => {
+    if (unit !== heightUnit) {
+      setHeight(
+        unit === "cm"
+          ? Math.round(height * 2.54 * 10) / 10
+          : Math.round((height / 2.54) * 10) / 10
+      );
+      setHeightUnit(unit);
+    }
+  };
+
   const calculateBMI = (weight: number, height: number): BMIResult => {
-    const heightInMeters = height / 100;
-    const bmi = weight / (heightInMeters * heightInMeters);
+    // Always use kg and cm for calculation
+    const weightKg = toKg(weight, weightUnit);
+    const heightCm = toCm(height, heightUnit);
+    const heightInMeters = heightCm / 100;
+    const bmi = weightKg / (heightInMeters * heightInMeters);
 
-    // Define thresholds and categories in order
-    const bmiCategories = [
-      { max: 18.5, label: "Underweight", color: "text-blue-600" },
-      { max: 25, label: "Normal weight", color: "text-green-600" },
-      { max: 30, label: "Overweight", color: "text-yellow-600" },
-      { max: Infinity, label: "Obese", color: "text-red-600" },
-    ];
-
-    const { label: category, color } =
-      bmiCategories.find((cat) => bmi < cat.max) ||
-      bmiCategories[bmiCategories.length - 1];
+    // Map BMI to category using thresholds
+    let categoryObj = null;
+    if (bmi < 18.5) categoryObj = bmiOptions[0];
+    else if (bmi < 25) categoryObj = bmiOptions[1];
+    else if (bmi < 30) categoryObj = bmiOptions[2];
+    else categoryObj = bmiOptions[3];
 
     return {
       value: Math.round(bmi * 10) / 10,
-      category,
-      color,
+      category: categoryObj.label,
+      color: categoryObj.color,
     };
   };
 
@@ -64,8 +84,8 @@ export default function BmiCalPopup() {
   };
 
   const handleReset = () => {
-    setWeight(70);
-    setHeight(170);
+    setWeight(150);
+    setHeight(65);
     setBmiResult(null);
     setShowResult(false);
   };
@@ -141,65 +161,65 @@ export default function BmiCalPopup() {
                         </div>
                       </div>
                       {/* Weight Input */}
-                      <div>
-                        <Label className="text-foreground text-sm font-medium mb-2 block">
-                          Weight (kg)
-                        </Label>
-                        <NumberField
-                          value={weight}
-                          onChange={setWeight}
-                          minValue={20}
-                          maxValue={300}
-                          step={0.1}
-                        >
-                          <Group className="border-input data-focus-within:border-ring data-focus-within:ring-ring/50 data-focus-within:has-aria-invalid:ring-destructive/20 dark:data-focus-within:has-aria-invalid:ring-destructive/40 data-focus-within:has-aria-invalid:border-destructive relative inline-flex h-9 w-full items-center overflow-hidden rounded-md border text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none data-disabled:opacity-50 data-focus-within:ring-[3px]">
-                            <RACButton
-                              slot="decrement"
-                              className="border-input bg-background text-muted-foreground/80 hover:bg-accent hover:text-foreground -ms-px flex aspect-square h-[inherit] items-center justify-center rounded-s-md border text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
-                            >
-                              <MinusIcon size={16} aria-hidden="true" />
-                            </RACButton>
-                            <Input className="bg-background text-foreground w-full grow px-3 py-2 text-center tabular-nums" />
-                            <RACButton
-                              slot="increment"
-                              className="border-input bg-background text-muted-foreground/80 hover:bg-accent hover:text-foreground -me-px flex aspect-square h-[inherit] items-center justify-center rounded-e-md border text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
-                            >
-                              <PlusIcon size={16} aria-hidden="true" />
-                            </RACButton>
-                          </Group>
-                        </NumberField>
+                      <div className="flex gap-2 items-end">
+                        <div className="flex-1">
+                          <Label className="text-foreground text-sm font-medium mb-2 block">
+                            Weight
+                          </Label>
+                          <input
+                            type="number"
+                            value={weight}
+                            min={weightUnit === "kg" ? 20 : 44}
+                            max={weightUnit === "kg" ? 300 : 660}
+                            step={0.1}
+                            onChange={(e) => setWeight(Number(e.target.value))}
+                            className="w-full border rounded-md px-3 py-2 text-center tabular-nums bg-background text-foreground"
+                          />
+                        </div>
+                        <div className="w-28">
+                          <InputDropdown
+                            label=""
+                            value={weightUnit}
+                            onChange={(val) =>
+                              handleWeightUnitChange(val as "lbs" | "kg")
+                            }
+                            options={[
+                              { label: "lbs", value: "lbs" },
+                              { label: "kg", value: "kg" },
+                            ]}
+                          />
+                        </div>
                       </div>
-
                       {/* Height Input */}
-                      <div>
-                        <Label className="text-foreground text-sm font-medium mb-2 block">
-                          Height (cm)
-                        </Label>
-                        <NumberField
-                          value={height}
-                          onChange={setHeight}
-                          minValue={100}
-                          maxValue={250}
-                          step={1}
-                        >
-                          <Group className="border-input data-focus-within:border-ring data-focus-within:ring-ring/50 data-focus-within:has-aria-invalid:ring-destructive/20 dark:data-focus-within:has-aria-invalid:ring-destructive/40 data-focus-within:has-aria-invalid:border-destructive relative inline-flex h-9 w-full items-center overflow-hidden rounded-md border text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none data-disabled:opacity-50 data-focus-within:ring-[3px]">
-                            <RACButton
-                              slot="decrement"
-                              className="border-input bg-background text-muted-foreground/80 hover:bg-accent hover:text-foreground -ms-px flex aspect-square h-[inherit] items-center justify-center rounded-s-md border text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
-                            >
-                              <MinusIcon size={16} aria-hidden="true" />
-                            </RACButton>
-                            <Input className="bg-background text-foreground w-full grow px-3 py-2 text-center tabular-nums" />
-                            <RACButton
-                              slot="increment"
-                              className="border-input bg-background text-muted-foreground/80 hover:bg-accent hover:text-foreground -me-px flex aspect-square h-[inherit] items-center justify-center rounded-e-md border text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
-                            >
-                              <PlusIcon size={16} aria-hidden="true" />
-                            </RACButton>
-                          </Group>
-                        </NumberField>
+                      <div className="flex gap-2 items-end">
+                        <div className="flex-1">
+                          <Label className="text-foreground text-sm font-medium mb-2 block">
+                            Height
+                          </Label>
+                          <input
+                            type="number"
+                            value={height}
+                            min={heightUnit === "cm" ? 100 : 39}
+                            max={heightUnit === "cm" ? 250 : 98}
+                            step={1}
+                            onChange={(e) => setHeight(Number(e.target.value))}
+                            className="w-full border rounded-md px-3 py-2 text-center tabular-nums bg-background text-foreground"
+                          />
+                        </div>
+                        <div className="w-28">
+                          <InputDropdown
+                            label=""
+                            value={heightUnit}
+                            onChange={(val) =>
+                              handleHeightUnitChange(val as "inches" | "cm")
+                            }
+                            options={[
+                              { label: "inches", value: "inches" },
+                              { label: "cm", value: "cm" },
+                            ]}
+                          />
+                        </div>
                       </div>
-
                       {/* Action Buttons */}
                       <div className="flex gap-3">
                         <Button onClick={handleCalculate} className="flex-1">
@@ -254,7 +274,20 @@ export default function BmiCalPopup() {
                         >
                           Recalculate
                         </Button>
-                        <Button onClick={handleBlogRedirect} className="flex-1">
+                        <Button
+                          onClick={handleBlogRedirect}
+                          className={`flex-1 ${
+                            bmiResult
+                              ? bmiOptions.find(
+                                  (opt) =>
+                                    opt.label ===
+                                    (bmiResult.category === "Normal weight"
+                                      ? "Normal"
+                                      : bmiResult.category)
+                                )?.buttonClass || ""
+                              : ""
+                          }`}
+                        >
                           Read blog suggestion for you
                         </Button>
                       </div>

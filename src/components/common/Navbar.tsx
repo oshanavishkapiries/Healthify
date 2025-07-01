@@ -101,7 +101,7 @@ export default function Navbar() {
           </Popover>
           {/* Main nav */}
 
-          <Logo />
+          <Logo width={60} height={60} />
         </div>
         {/* center */}
         {/* Navigation menu */}
