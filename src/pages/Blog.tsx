@@ -1,8 +1,6 @@
 import { BlogCard } from "@/components/BlogCard";
-import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
 import { CategoryFilter } from "@/components/common/category-filter";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useUserStore } from "@/store/userStore";
 import EmailVerifyBanner from "@/components/EmailVerifyBanner";
 import CompleteAccountBanner from "@/components/CompleteAccountBanner";
@@ -13,8 +11,7 @@ import ErrorBlogFound from "@/components/ErrorBlogFound";
 import { useGetBlogCategories } from "@/hooks/query/useMetaData";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { motion } from "framer-motion";
-import { SearchInput } from "@/components/common/SearchInput";
-import { useAdmin } from "@/hooks/useAdmin";
+//import { SearchInput } from "@/components/common/SearchInput";
 
 const Blog = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -23,7 +20,6 @@ const Blog = () => {
   const selectedCategory = searchParams.get("category") || "All";
 
   const { user } = useUserStore();
-  const { isAdmin } = useAdmin();
   const { categories } = useGetBlogCategories();
 
   const {
@@ -70,21 +66,10 @@ const Blog = () => {
         {!user?.isEmailVerified && user?.isProfileCompleted && (
           <EmailVerifyBanner />
         )}
-        <div className="flex items-center justify-center gap-3 mb-4 h-[80px]">
+        {/* <div className="flex items-center justify-center gap-3 mb-4 h-[80px]">
           <SearchInput />
-          {isAdmin && (
-            <Link to="/blog/create">
-              <Button className="rounded-lg aspect-square md:w-[150px] py-5">
-                <PlusIcon
-                  className="opacity-60 sm:-ms-1"
-                  size={16}
-                  aria-hidden="true"
-                />
-                <span className="hidden md:block text-sm">New Post</span>
-              </Button>
-            </Link>
-          )}
-        </div>
+        </div> */}
+
         <CategoryFilter
           categories={categories}
           selected={selectedCategory}

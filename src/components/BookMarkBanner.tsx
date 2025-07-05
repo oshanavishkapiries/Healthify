@@ -2,7 +2,7 @@ import { Bookmark } from "lucide-react";
 
 export default function BookMarkBanner() {
   return (
-    <div className="bg-muted text-foreground px-4 py-3 rounded-lg">
+    <div className="bg-muted text-foreground px-4 py-3 mb-3 rounded-lg">
       <div className="flex gap-2 md:items-center">
         <div className="flex grow gap-3 md:items-center">
           <div

@@ -11,7 +11,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Logo } from "@/components/common/logo";
-import { UserPlus, LogIn } from "lucide-react";
+import { UserPlus, LogIn, PlusIcon } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useScrollPosition } from "@/hooks/useScrollPosition";
 import { ModeToggle } from "@/components/ui/mode-toggle";
@@ -19,6 +19,8 @@ import { useActiveNav } from "@/hooks/useActiveNav";
 import ProfileComponent from "./ProfileComponent";
 import { useUserStore } from "@/store/userStore";
 import type { User } from "@/types/user";
+import SearchDialog from "../SearchDialog";
+import { useAdmin } from "@/hooks/useAdmin";
 
 const navigationLinks = [
   { href: "/", label: "Home" },
@@ -31,6 +33,7 @@ export default function Navbar() {
   const { y } = useScrollPosition();
   const { isActive } = useActiveNav();
   const { user, isAuthenticated } = useUserStore();
+  const { isAdmin } = useAdmin();
 
   return (
     <header
@@ -38,14 +41,14 @@ export default function Navbar() {
         y > 100 ? "bg-background/80 backdrop-blur-sm" : "bg-background/80"
       }`}
     >
-      <div className="flex h-16 items-center justify-between gap-4 w-full max-w-7xl mx-auto">
+      <div className="grid grid-cols-3 h-16 items-center justify-between gap-4 w-full max-w-7xl mx-auto">
         {/* Left side */}
-        <div className="flex items-center gap-2 w-[350px]">
+        <div className="flex justify-start items-center gap-2">
           {/* Mobile menu trigger */}
           <Popover>
             <PopoverTrigger asChild>
               <Button
-                className="group size-8 md:hidden"
+                className="group size-8 lg:hidden"
                 variant="ghost"
                 size="icon"
               >
@@ -76,7 +79,7 @@ export default function Navbar() {
                 </svg>
               </Button>
             </PopoverTrigger>
-            <PopoverContent align="start" className="w-36 p-1 md:hidden">
+            <PopoverContent align="start" className="w-36 p-1 lg:hidden">
               <NavigationMenu className="max-w-none *:w-full">
                 <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
                   {navigationLinks.map((link, index) => (
@@ -102,35 +105,40 @@ export default function Navbar() {
           {/* Main nav */}
 
           <Logo width={60} height={60} />
+
+          {/* Navigation menu */}
+          <div className="flex items-center gap-6 w-full justify-center max-lg:hidden">
+            <NavigationMenu>
+              <NavigationMenuList className="gap-2">
+                {navigationLinks.map((link, index) => (
+                  <NavigationMenuItem key={index}>
+                    <NavigationMenuLink asChild>
+                      <Link
+                        to={link.href}
+                        className={`rounded-full hover:text-primary py-1.5 px-4 font-medium flex flex-row items-center gap-1.5 ${
+                          isActive(link.href)
+                            ? "text-primary"
+                            : "text-muted-foreground"
+                        }`}
+                      >
+                        {link.label}
+                      </Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                ))}
+              </NavigationMenuList>
+            </NavigationMenu>
+          </div>
         </div>
+
         {/* center */}
-        {/* Navigation menu */}
-        <div className="flex items-center gap-6 w-full justify-center max-md:hidden">
-          <NavigationMenu>
-            <NavigationMenuList className="gap-2">
-              {navigationLinks.map((link, index) => (
-                <NavigationMenuItem key={index}>
-                  <NavigationMenuLink asChild>
-                    <Link
-                      to={link.href}
-                      className={`rounded-full hover:text-primary py-1.5 px-4 font-medium flex flex-row items-center gap-1.5 ${
-                        isActive(link.href)
-                          ? "text-primary"
-                          : "text-muted-foreground"
-                      }`}
-                    >
-                      {link.label}
-                    </Link>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-              ))}
-            </NavigationMenuList>
-          </NavigationMenu>
-        </div>
+        <div className=""></div>
+
         {/* Right side */}
-        <div className="flex items-center gap-2">
+        <div className="flex justify-end items-center gap-2">
+          <SearchDialog />
           {isAuthenticated ? (
-            <div className="flex items-center justify-end gap-2 md:w-[200px]">
+            <div className="flex items-center justify-end gap-2">
               <ProfileComponent user={user as User} />
             </div>
           ) : (
@@ -166,6 +174,16 @@ export default function Navbar() {
             </>
           )}
           <ModeToggle />
+
+          {isAdmin && (
+            <Link
+              to="/blog/create"
+              className="rounded-full aspect-square flex bg-primary text-primary-foreground items-center justify-center w-8 h-8"
+            >
+              <PlusIcon size={16} aria-hidden="true" />
+              {/* <span className="hidden md:block text-sm">New Post</span> */}
+            </Link>
+          )}
         </div>
       </div>
     </header>

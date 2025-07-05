@@ -1,6 +1,6 @@
 import { BlogCard } from "@/components/BlogCard";
 import BookMarkBanner from "@/components/BookMarkBanner";
-import { SearchInput } from "@/components/common/SearchInput";
+//import { SearchInput } from "@/components/common/SearchInput";
 import { useUserStore } from "@/store/userStore";
 import GotoSignIn from "@/components/GotoSignIn";
 import { useGetBookmarks } from "@/hooks/query/useBookmark";
@@ -39,15 +39,14 @@ const Bookmark = () => {
       return [];
     }) ?? [];
 
-
   return (
     <div className="min-h-screen">
       <main className="max-w-7xl mx-auto px-4 py-8">
         <BookMarkBanner />
         {/* search component */}
-        <div className="flex items-center justify-center gap-3 mb-4 h-[80px]">
+        {/* <div className="flex items-center justify-center gap-3 mb-4 h-[80px]">
           <SearchInput />
-        </div>
+        </div> */}
         {/* card grid */}
         {isLoading ? (
           <BlogPageLoader />

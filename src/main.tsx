@@ -1,4 +1,4 @@
-import { StrictMode, lazy, Suspense } from "react";
+import { StrictMode, lazy, Suspense, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 
@@ -12,10 +12,23 @@ const Loading = () => (
   </div>
 );
 
+// App wrapper to hide initial loader
+const AppWrapper = () => {
+  useEffect(() => {
+    // Hide the initial loader once React app is mounted
+    const loader = document.getElementById("initial-loader");
+    if (loader) {
+      loader.style.display = "none";
+    }
+  }, []);
+
+  return <App />;
+};
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Suspense fallback={<Loading />}>
-      <App />
+      <AppWrapper />
     </Suspense>
   </StrictMode>
 );

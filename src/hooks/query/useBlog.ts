@@ -10,6 +10,7 @@ import {
   updateBlog,
   deleteBlog,
   getBlogById,
+  searchBlogs,
 } from "@/services/blog.service";
 import type { UpdateBlogData, GetBlogsParams } from "@/types/blog-api-type";
 import { toast } from "sonner";
@@ -25,6 +26,41 @@ export const useGetBlogs = (params: Omit<GetBlogsParams, "page" | "limit">) => {
       return currentPage < totalPages ? currentPage + 1 : undefined;
     },
     initialPageParam: 1,
+  });
+};
+
+export const useSearchBlogs = (params: { search: string; limit?: number }) => {
+  return useInfiniteQuery({
+    queryKey: ["searchBlogs", params],
+    queryFn: ({ pageParam = 1 }) =>
+      searchBlogs({
+        ...params,
+        page: pageParam,
+        limit: params.limit || 10,
+      }),
+    getNextPageParam: (lastPage, allPages) => {
+      const currentPage = allPages?.length;
+      const totalPages = lastPage?.data?.totalPages;
+      return currentPage < totalPages ? currentPage + 1 : undefined;
+    },
+    initialPageParam: 1,
+    enabled: !!params.search && params.search.trim().length > 0,
+  });
+};
+
+export const useSearchBlogsSimple = (params: {
+  search: string;
+  limit?: number;
+}) => {
+  return useQuery({
+    queryKey: ["searchBlogsSimple", params],
+    queryFn: () =>
+      searchBlogs({
+        ...params,
+        page: 1,
+        limit: params.limit || 10,
+      }),
+    enabled: !!params.search && params.search.trim().length > 0,
   });
 };
 

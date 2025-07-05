@@ -15,6 +15,15 @@ export const getBlogs = async (params: GetBlogsParams) => {
   return response.data;
 };
 
+export const searchBlogs = async (params: {
+  page?: number;
+  limit?: number;
+  search: string;
+}) => {
+  const response = await axiosClient.get("/api/blog/search-data", { params });
+  return response.data;
+};
+
 export const updateBlog = async (blogId: string, blogData: UpdateBlogData) => {
   const response = await axiosClient.put(`/api/blog/${blogId}`, blogData);
   return response.data;
