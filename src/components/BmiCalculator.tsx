@@ -2,7 +2,7 @@ import BmiCalPopup from "@/components/BmiCalPopup";
 
 const BmiCalculator = () => {
   return (
-    <div className="relative overflow-hidden bg-gradient-to-br from-primary/20 via-primary/10 to-accent/20 border rounded-lg p-6 my-4 shadow-lg text-center">
+    <div className="relative overflow-hidden bg-gradient-to-br from-primary/20 via-background/70 to-accent/20 border rounded-lg p-6 my-4 shadow-lg text-center">
       {/* Gradient overlay elements */}
       <div className="absolute top-0 left-0 w-32 h-32 bg-primary/30 rounded-full blur-2xl -translate-x-1/2 -translate-y-1/2"></div>
       <div className="absolute bottom-0 right-0 w-40 h-40 bg-primary/20 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>

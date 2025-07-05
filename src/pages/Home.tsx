@@ -25,9 +25,9 @@ const Home = () => {
       )}
       <div className="w-full mb-4">
         <img
-          src={"https://i.ibb.co/kV395LHC/image.jpg"}
+          src={"/banner.png"}
           alt={"healthimage"}
-          className="w-full h-96 object-cover"
+          className="w-full h-[300px] md:h-[450px] object-cover"
         />
       </div>
       <main className="max-w-7xl mx-auto px-4 pb-4">
