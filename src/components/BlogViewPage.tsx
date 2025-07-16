@@ -21,7 +21,7 @@ export default function BlogViewPage({ blogPost }: { blogPost: BlogPostView }) {
           <OptimizedImage
             src={blogPost.image}
             alt={blogPost.title}
-            className="object-cover"
+            className="object-cover w-full aspect-video"
           />
           {/* Back button */}
           <Button
