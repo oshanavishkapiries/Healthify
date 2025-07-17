@@ -22,10 +22,10 @@ interface BMIResult {
 }
 
 export default function BmiCalPopup() {
-  const [weight, setWeight] = useState<number>(150);
-  const [height, setHeight] = useState<number>(65);
-  const [weightUnit, setWeightUnit] = useState<"lbs" | "kg">("lbs");
-  const [heightUnit, setHeightUnit] = useState<"inches" | "cm">("inches");
+  const [weight, setWeight] = useState<number>(0);
+  const [height, setHeight] = useState<number>(0);
+  const [weightUnit, setWeightUnit] = useState<"lbs" | "kg">("kg");
+  const [heightUnit, setHeightUnit] = useState<"inches" | "cm">("cm");
   const [bmiResult, setBmiResult] = useState<BMIResult | null>(null);
   const [showResult, setShowResult] = useState(false);
   const navigate = useNavigate();
@@ -84,8 +84,10 @@ export default function BmiCalPopup() {
   };
 
   const handleReset = () => {
-    setWeight(150);
-    setHeight(65);
+    setWeight(0);
+    setHeight(0);
+    setWeightUnit("kg");
+    setHeightUnit("cm");
     setBmiResult(null);
     setShowResult(false);
   };
