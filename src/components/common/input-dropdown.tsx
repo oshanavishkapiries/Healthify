@@ -42,7 +42,7 @@ export default function InputDropdown({
     : value || placeholder;
 
   return (
-    <div className="*:not-first:mt-2">
+    <div className="">
       <Label htmlFor={id}>{label}</Label>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

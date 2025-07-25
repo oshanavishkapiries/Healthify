@@ -1,4 +1,4 @@
-import BmiCalculator from "@/components/BmiCalculator";
+// import BmiCalculator from "@/components/BmiCalculator";
 import CompleteAccountBanner from "@/components/CompleteAccountBanner";
 import EmailVerifyBanner from "@/components/EmailVerifyBanner";
 import { HomeBlogCard } from "@/components/HomeBlogCard";
@@ -8,6 +8,7 @@ import BlogPageLoader from "@/components/BlogPageLoader";
 import type { BlogPost } from "@/types/Blog";
 import ErrorBlogFound from "@/components/ErrorBlogFound";
 import NoBlogFound from "@/components/NoBlogFound";
+import BmiCalculatorMobile from "@/components/BmiCalculatorMobile__";
 
 const Home = () => {
   const { user } = useUserStore();
@@ -23,15 +24,16 @@ const Home = () => {
       {!user?.isEmailVerified && user?.isProfileCompleted && (
         <EmailVerifyBanner />
       )}
-      <div className="w-full mb-4">
+      <div className="w-full">
         <img
           src={"/banner.png"}
           alt={"healthimage"}
           className="w-full h-[300px] md:h-[450px] object-cover"
         />
       </div>
+      <BmiCalculatorMobile />
       <main className="max-w-7xl mx-auto px-4 pb-4">
-        <BmiCalculator />
+        {/* <BmiCalculator /> */}
 
         {isLoading ? (
           <BlogPageLoader />

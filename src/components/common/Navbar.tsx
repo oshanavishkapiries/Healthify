@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/popover";
 import { Logo } from "@/components/common/logo";
 import { UserPlus, LogIn, PlusIcon } from "lucide-react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useScrollPosition } from "@/hooks/useScrollPosition";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import { useActiveNav } from "@/hooks/useActiveNav";
@@ -34,13 +34,14 @@ export default function Navbar() {
   const { isActive } = useActiveNav();
   const { user, isAuthenticated } = useUserStore();
   const { isAdmin } = useAdmin();
-  const pathname = useLocation();
+  // const pathname = useLocation();
+  // ${
+  //   pathname.pathname === "/" ? "sticky" : "sticky"
+  // }
 
   return (
     <header
-      className={`px-4 md:px-6 ${
-        pathname.pathname === "/" ? "fixed" : "sticky"
-      } top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`px-4 md:px-6 sticky top-0 left-0 right-0 z-50 transition-all duration-300 ${
         y > 100 ? "bg-background/70 backdrop-blur-sm" : "bg-background/70"
       }`}
     >
