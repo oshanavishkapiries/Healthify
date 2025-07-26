@@ -48,7 +48,7 @@ export default function InputDropdown({
         <DropdownMenuTrigger asChild>
           <Button
             variant="outline"
-            className={`w-full justify-between ${
+            className={`w-full  justify-between ${
               error ? "border-red-500" : ""
             } ${className || ""}`}
             type="button"

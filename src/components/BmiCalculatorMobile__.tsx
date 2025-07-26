@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -104,17 +104,17 @@ const BmiCalculatorMobile = () => {
   };
 
   return (
-    <div className="flex justify-center items-center w-full max-w-7xl mx-auto ">
+    <div className="flex justify-center items-center w-full max-w-7xl mx-auto">
       <Card className="w-full bg-background border-none shadow-none rounded-none overflow-hidden">
         <CardContent className="p-0">
           {/* Mobile Layout - Hidden on md+ screens */}
           <div className="md:hidden">
             {/* Weight and Height Inputs */}
-            <div className="bg-gradient-to-r from-green-400 via-green-600 to-green-700 text-white">
+            <div className="bg-gradient-to-r from-green-400 via-green-600 to-green-700">
               <div className="grid grid-cols-2">
                 {/* Weight */}
                 <div className="p-4 text-center border-r border-primary-foreground/20">
-                  <Label className="text-primary-foreground font-semibold text-lg mb-2 block">
+                  <Label className="text-primary-foreground font-semibold text-lg mb-1 block">
                     Weight
                   </Label>
                   <div className="flex flex-row justify-center items-center">
@@ -122,7 +122,7 @@ const BmiCalculatorMobile = () => {
                       type="number"
                       value={weight}
                       onChange={(e) => setWeight(Number(e.target.value))}
-                      className="w-20 text-center text-2xl font-bold bg-transparent border-none text-primary-foreground placeholder-primary-foreground/60 focus:ring-0 focus:border-none p-0"
+                      className="w-20 text-end text-2xl font-bold bg-transparent border-none text-primary-foreground placeholder-primary-foreground/60 focus:ring-0 focus:border-none p-0"
                       min={weightUnit === "kg" ? 20 : 44}
                       max={weightUnit === "kg" ? 300 : 660}
                       step={0.1}
@@ -137,14 +137,14 @@ const BmiCalculatorMobile = () => {
                         { label: "kg", value: "kg" },
                         { label: "lbs", value: "lbs" },
                       ]}
-                      className="text-xs bg-transparent border-none shadow-none text-white"
+                      className="text-xs bg-transparent border-none shadow-none text-primary-foreground"
                     />
                   </div>
                 </div>
 
                 {/* Height */}
                 <div className="p-4 text-center">
-                  <Label className="text-primary-foreground font-semibold text-lg mb-2 block">
+                  <Label className="text-primary-foreground font-semibold text-lg mb-1 block">
                     Height
                   </Label>
                   <div className="flex flex-row justify-center items-center">
@@ -152,7 +152,7 @@ const BmiCalculatorMobile = () => {
                       type="number"
                       value={height}
                       onChange={(e) => setHeight(Number(e.target.value))}
-                      className="w-20 text-center text-2xl font-bold bg-transparent border-none text-primary-foreground placeholder-primary-foreground/60 focus:ring-0 focus:border-none p-0"
+                      className="w-20 text-end text-2xl font-bold bg-transparent border-none text-primary-foreground placeholder-primary-foreground/60 focus:ring-0 focus:border-none p-0"
                       min={heightUnit === "cm" ? 100 : 39}
                       max={heightUnit === "cm" ? 250 : 98}
                       step={1}
@@ -167,7 +167,7 @@ const BmiCalculatorMobile = () => {
                         { label: "cm", value: "cm" },
                         { label: "inches", value: "inches" },
                       ]}
-                      className="text-sm bg-transparent border-none shadow-none text-white"
+                      className=" bg-transparent border-none shadow-none text-primary-foreground"
                     />
                   </div>
                 </div>
@@ -188,73 +188,67 @@ const BmiCalculatorMobile = () => {
 
           {/* Desktop Layout - Hidden on mobile, visible on md+ screens */}
           <div className="hidden md:block">
-            <div className="bg-gradient-to-r from-green-400 via-green-600 to-green-700 text-white">
+            <div className="bg-gradient-to-r rounded-md overflow-hidden mt-4 from-green-400 via-green-600 to-green-700">
               <div className="grid grid-cols-3">
                 {/* Weight */}
-                <div className="p-6 text-center border-r border-primary-foreground/20">
-                  <Label className="text-primary-foreground font-semibold text-lg mb-3 block">
+                <div className="p-3 text-center border-r border-primary-foreground/20">
+                  <Label className="text-primary-foreground font-semibold text-lg block">
                     Weight
                   </Label>
-                  <div className="flex items-center justify-center space-x-2 mb-2">
+                  <div className="flex flex-row justify-center items-center">
                     <Input
                       type="number"
                       value={weight}
                       onChange={(e) => setWeight(Number(e.target.value))}
-                      className="w-24 text-center text-2xl font-bold bg-transparent border-none text-primary-foreground placeholder-primary-foreground/60 focus:ring-0 focus:border-none p-0"
+                      className="w-auto text-end font-bold bg-transparent border-none text-primary-foreground placeholder-primary-foreground/60 focus:ring-0 focus:border-none p-0"
                       min={weightUnit === "kg" ? 20 : 44}
                       max={weightUnit === "kg" ? 300 : 660}
                       step={0.1}
                     />
-                  </div>
-                  <div className="flex justify-center">
-                    <div className="w-20">
-                      <InputDropdown
-                        label=""
-                        value={weightUnit}
-                        onChange={(val) =>
-                          handleWeightUnitChange(val as "lbs" | "kg")
-                        }
-                        options={[
-                          { label: "kg", value: "kg" },
-                          { label: "lbs", value: "lbs" },
-                        ]}
-                        className="text-xs bg-white/20 border-white/30 text-white"
-                      />
-                    </div>
+
+                    <InputDropdown
+                      label=""
+                      value={weightUnit}
+                      onChange={(val) =>
+                        handleWeightUnitChange(val as "lbs" | "kg")
+                      }
+                      options={[
+                        { label: "kg", value: "kg" },
+                        { label: "lbs", value: "lbs" },
+                      ]}
+                      className="text-xs bg-transparent  text-primary-foreground border-none"
+                    />
                   </div>
                 </div>
 
                 {/* Height */}
-                <div className="p-6 text-center border-r border-primary-foreground/20">
-                  <Label className="text-primary-foreground font-semibold text-lg mb-3 block">
+                <div className="p-3 text-center border-r border-primary-foreground/20">
+                  <Label className="text-primary-foreground font-semibold text-lg block">
                     Height
                   </Label>
-                  <div className="flex items-center justify-center space-x-2 mb-2">
+                  <div className="flex flex-row justify-center items-center">
                     <Input
                       type="number"
                       value={height}
                       onChange={(e) => setHeight(Number(e.target.value))}
-                      className="w-24 text-center text-2xl font-bold bg-transparent border-none text-primary-foreground placeholder-primary-foreground/60 focus:ring-0 focus:border-none p-0"
+                      className="w-auto text-end font-bold bg-transparent border-none text-primary-foreground placeholder-primary-foreground/60 focus:ring-0 focus:border-none p-0"
                       min={heightUnit === "cm" ? 100 : 39}
                       max={heightUnit === "cm" ? 250 : 98}
                       step={1}
                     />
-                  </div>
-                  <div className="flex justify-center">
-                    <div className="w-20">
-                      <InputDropdown
-                        label=""
-                        value={heightUnit}
-                        onChange={(val) =>
-                          handleHeightUnitChange(val as "inches" | "cm")
-                        }
-                        options={[
-                          { label: "cm", value: "cm" },
-                          { label: "inches", value: "inches" },
-                        ]}
-                        className="text-xs bg-white/20 border-white/30 text-white"
-                      />
-                    </div>
+
+                    <InputDropdown
+                      label=""
+                      value={heightUnit}
+                      onChange={(val) =>
+                        handleHeightUnitChange(val as "inches" | "cm")
+                      }
+                      options={[
+                        { label: "cm", value: "cm" },
+                        { label: "inches", value: "inches" },
+                      ]}
+                      className="text-xs bg-transparent  text-primary-foreground border-none"
+                    />
                   </div>
                 </div>
 
@@ -262,8 +256,9 @@ const BmiCalculatorMobile = () => {
                 <div className="p-6 flex items-center justify-center">
                   <Button
                     onClick={handleCalculate}
-                    className="bg-white/20 hover:bg-white/30 text-white font-bold py-3 px-8 text-lg rounded-md transition-colors border border-white/30"
+                    className="text-primary-foreground border-none font-bold py-3 px-8 text-lg rounded-md"
                     size="lg"
+                    variant="ghost"
                   >
                     CALCULATE
                   </Button>

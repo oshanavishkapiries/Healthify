@@ -26,9 +26,9 @@ const Home = () => {
       )}
       <div className="w-full">
         <img
-          src={"/banner.png"}
+          src={"https://i.ibb.co/JWvmzBZ9/Are-You-Confident-About-Your-Health.png"}
           alt={"healthimage"}
-          className="w-full h-[300px] md:h-[450px] object-cover"
+          className="w-full h-[300px] md:h-[450px] lg:h-[500px] xl:h-[600px] object-cover"
         />
       </div>
       <BmiCalculatorMobile />
