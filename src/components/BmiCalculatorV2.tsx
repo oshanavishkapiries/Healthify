@@ -15,7 +15,6 @@ const BmiCalculatorV2 = () => {
   const [weightUnit, setWeightUnit] = useState<"lbs" | "kg">("lbs");
   const [heightUnit, setHeightUnit] = useState<"inches" | "cm">("inches");
   const [bmiResult, setBmiResult] = useState<BMIResult | null>(null);
-  const [showResult, setShowResult] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [showWeightDropdown, setShowWeightDropdown] = useState(false);
   const [showHeightDropdown, setShowHeightDropdown] = useState(false);
@@ -92,7 +91,6 @@ const BmiCalculatorV2 = () => {
     if (weight > 0 && height > 0) {
       const result = calculateBMI(weight, height);
       setBmiResult(result);
-      setShowResult(true);
       setIsDialogOpen(true);
     }
   };
@@ -103,7 +101,6 @@ const BmiCalculatorV2 = () => {
     setWeightUnit("lbs");
     setHeightUnit("inches");
     setBmiResult(null);
-    setShowResult(false);
   };
 
   const handleBlogRedirect = () => {
