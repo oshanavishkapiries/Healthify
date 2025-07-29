@@ -1,4 +1,3 @@
-// import BmiCalculator from "@/components/BmiCalculator";
 import CompleteAccountBanner from "@/components/CompleteAccountBanner";
 import EmailVerifyBanner from "@/components/EmailVerifyBanner";
 import { HomeBlogCard } from "@/components/HomeBlogCard";
@@ -8,7 +7,7 @@ import BlogPageLoader from "@/components/BlogPageLoader";
 import type { BlogPost } from "@/types/Blog";
 import ErrorBlogFound from "@/components/ErrorBlogFound";
 import NoBlogFound from "@/components/NoBlogFound";
-import ImageSider from "@/components/common/ImageSider";
+import ContentSlider from "@/components/common/sider/ContentSlider";
 import BmiCalculatorV2 from "@/components/BmiCalculatorV2";
 
 const Home = () => {
@@ -17,20 +16,6 @@ const Home = () => {
 
   const blogs: BlogPost[] = data?.pages[0]?.data?.blogs.slice(0, 4) || [];
 
-  // Sample health-related images for the slider
-  const healthImages = [
-    {
-      src: "https://i.ibb.co/DDt5bSJC/Frame-2085666416.png",
-      alt: "Health Confidence",
-    },
-    {
-      src: "https://i.ibb.co/FLVr4GNL/Frame-2085666418.png",
-      alt: "Healthy Lifestyle",
-    },
-  ];
-
-  console.log(blogs);
-
   return (
     <div className="min-h-screen">
       {user && !user?.isProfileCompleted && <CompleteAccountBanner />}
@@ -38,11 +23,10 @@ const Home = () => {
         <EmailVerifyBanner />
       )}
       <div className="w-full">
-        <ImageSider images={healthImages} autoPlay={true} interval={4000} />
+        <ContentSlider autoPlay={true} interval={4000} />
       </div>
       <BmiCalculatorV2 />
       <main className="max-w-7xl mx-auto px-4 pb-4">
-        {/* <BmiCalculator /> */}
         {isLoading ? (
           <BlogPageLoader />
         ) : error ? (

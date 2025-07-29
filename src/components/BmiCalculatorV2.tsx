@@ -118,10 +118,10 @@ const BmiCalculatorV2 = () => {
   return (
     <div className="w-full max-w-7xl mx-auto lg:p-4">
       <div className="grid grid-cols-12 gap-4">
-        <div className="bg-green-500 relative px-4 lg:px-0 lg:bg-transparent grid grid-cols-12 gap-4 col-span-12 lg:col-span-8">
+        <div className="max-lg:bg-gradient-to-r from-green-600 via-green-500 to-[#07d51d] relative px-4 lg:px-0 lg:bg-transparent grid grid-cols-12 gap-4 col-span-12 lg:col-span-8">
           {/* Weight Panel */}
           <div className="relative col-span-6">
-            <div className="bg-green-500 rounded-lg p-4 text-white">
+            <div className="lg:bg-gradient-to-r lg:from-green-600 via-green-500 lg:to-[#07d51d] rounded-lg p-4 text-white">
               <div className="text-sm font-medium mb-2">Weight</div>
               <div className="flex items-center justify-between">
                 <input
@@ -176,7 +176,7 @@ const BmiCalculatorV2 = () => {
 
           {/* Height Panel */}
           <div className="relative col-span-6">
-            <div className="bg-green-500 rounded-lg p-4 text-white">
+            <div className="lg:bg-gradient-to-r lg:from-green-600 via-green-500 lg:to-[#07d51d] rounded-lg p-4 text-white">
               <div className="text-sm font-medium mb-2">Height</div>
               <div className="flex items-center justify-between">
                 <input
