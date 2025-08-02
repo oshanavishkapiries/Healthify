@@ -12,7 +12,7 @@ export default defineConfig({
   preview: {
     port: 8080,
     strictPort: true,
-    allowedHosts: ["localhost", "127.0.0.1", "0.0.0.0", "healthify.freeddns.org"],
+    allowedHosts: ["localhost", "127.0.0.1", "0.0.0.0", "healthstation24.com"],
    },
    server: {
     port: 8080,
