@@ -10,10 +10,10 @@ interface BMIResult {
 }
 
 const BmiCalculatorV2 = () => {
-  const [weight, setWeight] = useState<number>(154.3);
-  const [height, setHeight] = useState<number>(66.1);
-  const [weightUnit, setWeightUnit] = useState<"lbs" | "kg">("lbs");
-  const [heightUnit, setHeightUnit] = useState<"inches" | "cm">("inches");
+  const [weight, setWeight] = useState<number>(70);
+  const [height, setHeight] = useState<number>(5.5);
+  const [weightUnit, setWeightUnit] = useState<"lbs" | "kg">("kg");
+  const [heightUnit, setHeightUnit] = useState<"feet" | "cm">("feet");
   const [bmiResult, setBmiResult] = useState<BMIResult | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [showWeightDropdown, setShowWeightDropdown] = useState(false);
@@ -22,7 +22,7 @@ const BmiCalculatorV2 = () => {
 
   // Conversion helpers
   const toKg = (w: number, unit: string) => (unit === "kg" ? w : w * 0.453592);
-  const toCm = (h: number, unit: string) => (unit === "cm" ? h : h * 2.54);
+  const toCm = (h: number, unit: string) => (unit === "cm" ? h : h * 30.48);
 
   const handleWeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -56,12 +56,12 @@ const BmiCalculatorV2 = () => {
     setShowWeightDropdown(false);
   };
 
-  const handleHeightUnitChange = (unit: "inches" | "cm") => {
+  const handleHeightUnitChange = (unit: "feet" | "cm") => {
     if (unit !== heightUnit) {
       setHeight(
         unit === "cm"
-          ? Math.round(height * 2.54 * 10) / 10
-          : Math.round((height / 2.54) * 10) / 10
+          ? Math.round(height * 30.48 * 10) / 10
+          : Math.round((height / 30.48) * 10) / 10
       );
       setHeightUnit(unit);
     }
@@ -96,10 +96,10 @@ const BmiCalculatorV2 = () => {
   };
 
   const handleReset = () => {
-    setWeight(154.3);
-    setHeight(66.1);
-    setWeightUnit("lbs");
-    setHeightUnit("inches");
+    setWeight(70);
+    setHeight(5.5);
+    setWeightUnit("kg");
+    setHeightUnit("feet");
     setBmiResult(null);
   };
 
@@ -113,6 +113,17 @@ const BmiCalculatorV2 = () => {
       navigate(`/blog?bmi=${statusValue}`);
       setIsDialogOpen(false);
     }
+  };
+
+  // Function to handle dropdown toggles with proper state management
+  const toggleWeightDropdown = () => {
+    setShowWeightDropdown(!showWeightDropdown);
+    setShowHeightDropdown(false); // Close height dropdown when opening weight dropdown
+  };
+
+  const toggleHeightDropdown = () => {
+    setShowHeightDropdown(!showHeightDropdown);
+    setShowWeightDropdown(false); // Close weight dropdown when opening height dropdown
   };
 
   return (
@@ -136,7 +147,7 @@ const BmiCalculatorV2 = () => {
                 />
                 <div className="flex items-center gap-1">
                   <button
-                    onClick={() => setShowWeightDropdown(!showWeightDropdown)}
+                    onClick={toggleWeightDropdown}
                     className="text-white hover:text-green-100 transition-colors flex items-center gap-1"
                   >
                     <span className="text-base font-medium">{weightUnit}</span>
@@ -185,13 +196,13 @@ const BmiCalculatorV2 = () => {
                   onChange={handleHeightChange}
                   className="text-2xl font-bold bg-transparent text-white outline-none w-20"
                   placeholder="0"
-                  min={heightUnit === "cm" ? 100 : 39}
-                  max={heightUnit === "cm" ? 250 : 98}
-                  step={1}
+                  min={heightUnit === "cm" ? 100 : 3}
+                  max={heightUnit === "cm" ? 250 : 8}
+                  step={0.1}
                 />
                 <div className="flex items-center gap-1">
                   <button
-                    onClick={() => setShowHeightDropdown(!showHeightDropdown)}
+                    onClick={toggleHeightDropdown}
                     className="text-white hover:text-green-100 transition-colors flex items-center gap-1"
                   >
                     <span className="text-base font-medium">{heightUnit}</span>
@@ -219,10 +230,10 @@ const BmiCalculatorV2 = () => {
                     cm
                   </button>
                   <button
-                    onClick={() => handleHeightUnitChange("inches")}
+                    onClick={() => handleHeightUnitChange("feet")}
                     className="w-full px-3 py-2 text-left text-gray-700 hover:bg-gray-100 text-base"
                   >
-                    inches
+                    feet
                   </button>
                 </div>
               )}
