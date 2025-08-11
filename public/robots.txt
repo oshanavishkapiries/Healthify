@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Disallow specific paths (optional)
+Disallow: /admin/
+Disallow: /private/
+
+# Sitemap (optional but recommended)
+Sitemap: https://healthstation24.com/sitemap.xml

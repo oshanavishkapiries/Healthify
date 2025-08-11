@@ -10,8 +10,8 @@ interface BMIResult {
 }
 
 const BmiCalculatorV2 = () => {
-  const [weight, setWeight] = useState<number>(70);
-  const [height, setHeight] = useState<number>(5.5);
+  const [weight, setWeight] = useState<number>(0);
+  const [height, setHeight] = useState<number>(0);
   const [weightUnit, setWeightUnit] = useState<"lbs" | "kg">("kg");
   const [heightUnit, setHeightUnit] = useState<"feet" | "cm">("feet");
   const [bmiResult, setBmiResult] = useState<BMIResult | null>(null);
@@ -96,8 +96,8 @@ const BmiCalculatorV2 = () => {
   };
 
   const handleReset = () => {
-    setWeight(70);
-    setHeight(5.5);
+    setWeight(0);
+    setHeight(0);
     setWeightUnit("kg");
     setHeightUnit("feet");
     setBmiResult(null);
@@ -287,7 +287,7 @@ const BmiCalculatorV2 = () => {
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: 0.2, duration: 0.3 }}
-                      className={`text-3xl font-bold ${bmiResult.color} mb-2`}
+                      className={`text-5xl font-bold ${bmiResult.color} mb-2`}
                     >
                       {bmiResult.value}
                     </motion.div>
@@ -302,7 +302,7 @@ const BmiCalculatorV2 = () => {
                   </motion.div>
                 )}
 
-                <motion.div
+                {/* <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4, duration: 0.3 }}
@@ -326,7 +326,7 @@ const BmiCalculatorV2 = () => {
                     <div className="font-medium text-red-600">Obese</div>
                     <div className="text-gray-500">≥ 30</div>
                   </div>
-                </motion.div>
+                </motion.div> */}
 
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
