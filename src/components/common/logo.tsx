@@ -22,7 +22,7 @@ export function Logo({
           height={height}
           className="object-contain"
         />
-        {/* <h1 className="text-2xl font-bold italic">Healthify</h1> */}
+        {/* <h1 className="text-2xl font-bold italic">healthstation24</h1> */}
       </div>
     </Link>
   );
